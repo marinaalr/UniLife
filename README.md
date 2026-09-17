@@ -10,6 +10,7 @@ In addition, administrators are granted extended permissions to manage user acco
 
 Overall, UniLife is intended to offer a structured and convenient digital environment that brings together essential academic and social activities in one place. 
 
+
 ## Team Members
 
 | **Name** | **GitHub Username** |
@@ -25,6 +26,7 @@ I, Marina Alramo, declare that I am the sole author of the content that I add to
 I, Christina Outra, declare that I am the sole author of the content that I add to this repository. 
 
 I, Ludvig Kågefors, declare that I am the sole author of the content that I add to this repository. 
+
 
 ## Features
 
@@ -168,3 +170,46 @@ Contains the different views presented to users.
 ### Controllers
 
 Handles application logic and interactions between different parts of the application. 
+
+
+## How to Run the Project
+
+To run UniLife locally, follow the steps below.
+
+### Clone the Repository
+
+Clone the repository by using: 
+```bash
+git clone https://github.com/marinaalr/UniLife.git
+```
+
+Navigate to the project directory:
+```bash
+cd UniLife
+```
+
+### Installation
+
+Install the required project dependencies by running: 
+```bash
+npm install
+```
+
+### Running the Application
+
+Start the development server by running:
+```bash
+npm start
+```
+
+The application will then be available in the browser at:
+```bash
+http://localhost:3000
+```
+
+### Build
+
+To create a production build of the application, run: 
+```bash
+npm run build
+```
