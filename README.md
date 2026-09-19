@@ -1,70 +1,215 @@
-# Getting Started with Create React App
+# UniLife
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Description
 
-## Available Scripts
+UniLife is a web application developed to provide university students with a centralized platform for organizing and managing various aspects of their academic and social lives. 
 
-In the project directory, you can run:
+The application enables users to discover and participate in campus events, organize personal tasks, and receive relevant notifications. Users can also customize their profiles and indicate their interests, allowing them to identify activities that correspond to their individual preferences. 
 
-### `npm start`
+In addition, administrators are granted extended permissions to manage user accounts and oversee the content published within the application, including the moderation of events. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Overall, UniLife is intended to offer a structured and convenient digital environment that brings together essential academic and social activities in one place. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## Team Members
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| **Name** | **GitHub Username** |
+|---|---|
+| Marina Alramo | @marinaalr |
+| Christina Outra | @christinaoutra |
+| Ludvig Kågefors | @ludvigkagefors |
 
-### `npm run build`
+## Declarations
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+I, Marina Alramo, declare that I am the sole author of the content that I add to this repository. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+I, Christina Outra, declare that I am the sole author of the content that I add to this repository. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I, Ludvig Kågefors, declare that I am the sole author of the content that I add to this repository. 
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Features
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### User Management
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Create a user account
+- Log in and log out
+- Manage personal profiles
+- Specify personal interests
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Event Management
 
-## Learn More
+- Create campus events
+- View available events
+- Edit and delete own events
+- Allow administrators to manage and moderate events
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Event Participation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Join events
+- Leave events
+- View events the user is participating in
 
-### Code Splitting
+### Task Management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Create personal tasks
+- Edit existing tasks
+- Mark tasks as completed
+- Delete tasks
+- Set and update deadlines
+- Track task progress
 
-### Analyzing the Bundle Size
+### Personal Dashboard
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- View upcoming events
+- View joined events
+- View pending tasks
+- View approaching deadlines
 
-### Making a Progressive Web App
+### Search and Filtering
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Search for events
+- Filter events by keywords, categories, dates, and locations
 
-### Advanced Configuration
+### Notifications
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Receive notifications about upcoming events
+- Receive updates concerning joined events
+- Receive reminders about approaching task deadlines
 
-### Deployment
+### Administration and Moderation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Manage users
+- Moderate events
+- Remove inappropriate events or content
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Main Entities / Objects
+
+### User
+
+Stores account and profile information, including:
+- Name
+- Email
+- User role
+- Interests
+
+### Event
+
+Represents campus events and contains information such as: 
+- Title
+- Description
+- Date
+- Location
+- Creator
+- Participants
+
+### Task
+
+Represents personal academic or organizational tasks, including: 
+
+- Title
+- Description
+- Deadline
+- Status
+- Assigned user
+
+
+## How It Works
+
+UniLife brings together academic and social activities within a single web application. 
+
+### Events
+
+Users can discover available campus events, view event information, and participate in events that interest them. 
+
+### Tasks
+
+Users can organize their academic and organizational responsibilities by creating tasks, setting deadlines, and tracking their progress. 
+
+### Personalization
+
+Users can manage their profiles and specify their interests in order to discover activities that are relevant to them. 
+
+### Administration
+
+Administrators have additional permissions that allow them to manage users and moderate events and content. 
+
+
+## Technologies
+
+The project is developed using the following technologies: 
+
+- ReactJS
+- Material UI (MUI)
+- Node.js
+- ExpressJS
+- React Router
+- ESLint
+
+
+## Project Structure
+The project follows an MVC (Model-View-Controller) inspired structure. 
+
+### Components
+
+Contains reusable React components used throughout the application.
+
+### Models
+
+Defines the data models used by the application.
+
+### Model Data
+
+Contains predefined data used by the application. 
+
+### Views
+
+Contains the different views presented to users. 
+
+### Controllers
+
+Handles application logic and interactions between different parts of the application. 
+
+
+## How to Run the Project
+
+To run UniLife locally, follow the steps below.
+
+### Clone the Repository
+
+Clone the repository by using: 
+```bash
+git clone https://github.com/marinaalr/UniLife.git
+```
+
+Navigate to the project directory:
+```bash
+cd UniLife
+```
+
+### Installation
+
+Install the required project dependencies by running: 
+```bash
+npm install
+```
+
+### Running the Application
+
+Start the development server by running:
+```bash
+npm start
+```
+
+The application will then be available in the browser at:
+```bash
+http://localhost:3000
+```
+
+### Build
+
+To create a production build of the application, run: 
+```bash
+npm run build
+```
