@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import {
+    Box,
+    Button,
+    Paper,
+    TextField,
+    Typography,
+    Link
+} from "@mui/material";
 import "./ForgotPassword.css";
 
 function ForgotPassword() {
@@ -13,53 +21,57 @@ function ForgotPassword() {
     };
 
     return (
-        <div className="forgot-page">
-            <div className="forgot-card">
-                <h1>Forgot Password?</h1>
+        <Box className="forgot-page">
+            <Paper className="forgot-card" elevation={3}>
+                <Typography variant="h3" component="h1">
+                    Forgot Password?
+                </Typography>
 
-                <p className="forgot-subtitle">
+                <Typography className="forgot-subtitle">
                     Enter your email address to reset your password.
-                </p>
+                </Typography>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="forgot-form-group">
-                        <label htmlFor="email">
-                            Email
-                        </label>
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                >
+                    <TextField
+                        fullWidth
+                        label="Email"
+                        type="email"
+                        value={email}
+                        onChange={(event) =>
+                            setEmail(event.target.value)
+                        }
+                        required
+                        margin="normal"
+                    />
 
-                        <input
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(event) =>
-                                setEmail(event.target.value)
-                            }
-                            required
-                        />
-                    </div>
-
-                    <button
+                    <Button
                         className="reset-button"
                         type="submit"
+                        variant="contained"
+                        fullWidth
                     >
                         Reset Password
-                    </button>
-                </form>
+                    </Button>
+                </Box>
 
                 {message && (
-                    <p className="forgot-message">
+                    <Typography className="forgot-message">
                         {message}
-                    </p>
+                    </Typography>
                 )}
 
                 <Link
-                    className="back-login-button"
+                    component={RouterLink}
                     to="/login"
+                    className="back-login-button"
                 >
                     Back to Login
                 </Link>
-            </div>
-        </div>
+            </Paper>
+        </Box>
     );
 }
 
