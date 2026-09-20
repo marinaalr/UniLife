@@ -1,4 +1,14 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+    Box,
+    Button,
+    Paper,
+    TextField,
+    Typography
+} from "@mui/material";
+
+import "./Login.css"
 
 function Login() {
     const [identifier, setIdentifier] = useState("");
@@ -11,55 +21,73 @@ function Login() {
         console.log("Password:", password);
     };
 
-    const handleForgotPassword = () => {
-        console.log("Forgot password clicked");
-    };
-
-    const handleRegister = () => {
-        console.log("Register clicked");
-    };
-
     return (
-        <div>
-            <h1>Login</h1>
+        <Box className="login-page">
+            <Paper className="login-card" elevation={3}>
+                <Typography variant="h3" component="h1">
+                    Welcome to UniLife
+                </Typography>
 
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="identifier">Username or Email</label>
-                    <input
-                        id="identifier"
+                <Typography className="login-subtitle">
+                    Log in to your account
+                </Typography>
+
+                <Box
+                    component="form"
+                    onSubmit={handleLogin}
+                >
+                    <TextField
+                        fullWidth
+                        label="Username or Email"
                         type="text"
                         value={identifier}
-                        onChange={(event) => setIdentifier(event.target.value)}
+                        onChange={(event) =>
+                            setIdentifier(event.target.value)
+                        }
                         required
+                        margin="normal"
                     />
-                </div>
 
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
-                       id="password"
-                       type="password"
-                       value={password}
-                       onChange={(event) => setPassword(event.target.value)}
-                       required
+                    <TextField
+                        fullWidth
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(event) =>
+                            setPassword(event.target.value)
+                        }
+                        required
+                        margin="normal"
                     />
-                </div>
 
-                <button type="submit">Login</button>
-            </form>
+                    <Button
+                        className="login-button"
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                    >
+                        Login
+                    </Button>
+                </Box>
 
-            <button type ="button" onClick={handleForgotPassword}>
-                Forgot password?
-            </button>
+                <Link
+                    className="forgot-button"
+                    to="/forgot-password"
+                >
+                    Forgot password?
+                </Link>
 
-            <p>
-                Don't have an account?{" "}
-                <button type="button" onClick={handleRegister}>
-                    Sign up
-                </button>
-            </p>
-        </div>
+                <Typography className="register-text">
+                    Don't have an account?{" "}
+                    <Link
+                        className="signup-button"
+                        to="/register"
+                    >
+                        Sign up
+                    </Link>
+                </Typography>
+            </Paper>
+        </Box>
     );
 }
 

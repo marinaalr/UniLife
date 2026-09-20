@@ -1,0 +1,122 @@
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #eef3f8;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.login-card {
+    width: 420px;
+    padding: 45px;
+    background: white;
+    border: 1px solid #d9e1e8;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(23, 50, 77, 0.12);
+    text-align: center;
+}
+
+.login-card h1 {
+    margin: 0 0 10px;
+    color: #17324d;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.login-subtitle {
+    margin-bottom: 32px;
+    color: #667085;
+    font-size: 17px;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #344054;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #cfd6df;
+    border-radius: 8px;
+    background: white;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #2f6f8f;
+    box-shadow: 0 0 0 3px rgba(47, 111, 143, 0.15);
+}
+
+.login-button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #2f6f8f;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.login-button:hover {
+    background: #245970;
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+.forgot-button {
+    margin-top: 18px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #2f6f8f;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.forgot-button:hover {
+    text-decoration: underline;
+}
+
+.register-text {
+    margin-top: 28px;
+    color: #667085;
+    font-size: 14px;
+}
+
+.signup-button {
+    margin-left: 5px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #2f6f8f;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.signup-button:hover {
+    text-decoration: underline;
+}
