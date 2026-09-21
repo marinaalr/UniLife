@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Dashboard from "./views/Dashboard";
 
 import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
@@ -23,6 +24,11 @@ function App() {
                 <Route
                     path="/forgot-password"
                     component={ForgotPassword}
+                />
+
+                <Route
+                    path="/dashboard"
+                    component={Dashboard}
                 />
             </Switch>
         </BrowserRouter>
