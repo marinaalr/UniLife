@@ -6,6 +6,8 @@ import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
 
+import Profile from "./views/Profile";
+
 function App() {
     return (
         <BrowserRouter>
@@ -29,6 +31,11 @@ function App() {
                 <Route
                     path="/dashboard"
                     component={Dashboard}
+                />
+
+                <Route
+                    path="/profile"
+                    component={Profile}
                 />
             </Switch>
         </BrowserRouter>
