@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import ForgotPassword from "./views/ForgotPassword";
 
+import HomePage from "./views/HomePage";
+import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
                 <Route
                     exact
                     path="/"
-                    render={() => <div>UniLife Start Page</div>}
+                    component={HomePage}
                 />
 
                 <Route
@@ -20,10 +21,9 @@ function App() {
                 />
 
                 <Route
-                   path="/forgot-password"
-                   component={ForgotPassword}
+                    path="/forgot-password"
+                    component={ForgotPassword}
                 />
-
             </Switch>
         </BrowserRouter>
     );
