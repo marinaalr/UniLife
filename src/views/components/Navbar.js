@@ -1,6 +1,7 @@
 //JavaScript
 //Import Material UI components 
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { Link } from "react-router-dom";
 
 //Create the navbar component 
 function Navbar () {
@@ -25,8 +26,20 @@ function Navbar () {
 
                 {/* Push login buttons to the right */}
                 <Box sx={{ marginLeft: 'auto' }}>  {/*bobxen trycks så långs åt häger som möjligt*/}
-                  <Button color="inherit">Log in</Button>
-                  <Button color="inherit">Sign up</Button>
+                    <Button 
+                      color="inherit"
+                      component={Link}
+                      to="/login"
+                    >
+                        Log in
+                   </Button>
+                   <Button 
+                      color="inherit"
+                      component={Link}
+                      to="/register"
+                    >
+                        Sign up
+                    </Button>
                 </Box>
 
             </Toolbar>
