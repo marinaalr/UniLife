@@ -69,13 +69,6 @@
     background: #eef3f8;
 }
 
-.month-label {
-    min-width: 180px;
-    text-align: center;
-    font-weight: 600;
-    color: #344054;
-}
-
 .calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -95,9 +88,12 @@
     border-left: 1px solid #e1e7ed;
 }
 
-.calendar-day {
-    display: block;
+.calendar-day.MuiButton-root {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
     width: 100%;
+    min-width: 0;
     min-height: 120px;
     padding: 10px;
     border-right: 1px solid #e1e7ed;
@@ -106,14 +102,25 @@
     background: white;
     text-align: left;
     color: inherit;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-transform: none;
 }
 
-.calendar-day:hover {
+.calendar-day.MuiButton-root:hover {
     background: #f5f8fb;
 }
 
 .calendar-day.empty {
     background: #f8fafc;
+}
+
+.calendar-day.today.MuiButton-root {
+    background: #eef3f8;
+}
+
+.calendar-day.today.MuiButton-root:hover {
+    background: #e3edf4;
 }
 
 .day-number {
@@ -142,13 +149,27 @@
     color: #17324d;
 }
 
+.overview-count {
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #17324d;
+}
+
 .empty-text {
     color: #98a2b3;
     font-size: 14px;
 }
 
+.dialog-section-title {
+    margin-top: 8px;
+    margin-bottom: 10px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: #17324d;
+}
+
 .day-dialog-text {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     color: #667085;
 }
 
@@ -157,7 +178,7 @@
         padding: 30px 20px;
     }
 
-    .calendar-day {
+    .calendar-day.MuiButton-root {
         min-height: 90px;
         padding: 6px;
     }
