@@ -1,11 +1,8 @@
-import React from 'react';
+import HomePage from './views/HomePage';  //Bring HomePage from pages map 
 
 function App() {
   return (
-    <div>
-      <h1>UniLife</h1>
-      <p>Welcome to UniLife!</p>
-      </div>
+    <HomePage />  //show komponent HomePage here 
   );
 }
 
