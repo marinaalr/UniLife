@@ -1,21 +1,65 @@
-class User {
-    constructor(name, email, userName, password) {
-        this.name = name;
-        this.email = email;
-        this.userName = userName;
-        this.password = password;
-    }
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+    Box,
+    Button,
+    Paper,
+    TextField,
+    Typography
+} from "@mui/material";
+import "./sign_up.css"
+
+function Signup() {
+    return (
+        <Box className="signUp-page">
+            <Paper className="signUp-card" elevation={3}>
+                <Typography
+                    variant="h3"
+                    component="h1"
+                    sx={{
+                        fontFamily: 'Georgia, "Times New Roman", serif',
+                        fontWeight: 700,
+                        fontSize: "36px"
+                    }}
+                >
+                    Sign Up
+                </Typography>
+
+                <TextField
+                    fullWidth
+                    label="Username"
+                    type="text"
+                    required
+                    margin="normal"                    
+                ></TextField>
+
+                <TextField
+                    fullWidth
+                    label="Email"
+                    type="email"
+                    required
+                    margin="normal"                    
+                ></TextField>
+
+                <TextField
+                    fullWidth
+                    label="Password"
+                    type="password"
+                    required
+                    margin="normal"                    
+                ></TextField>
+
+                <Button
+                    className="signUp-button"
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                >
+                    Sign Up
+                </Button>
+            </Paper>
+        </Box>
+    )
 }
 
-function register() {
-    var newUser = new User(document.getElementById("nameInput").value, document.getElementById("mailInput").value,
-                           document.getElementById("userNameInput").value, document.getElementById("passwordInput").value);
-    return newUser;
-}
-
-function showText() {
-    var user = register();
-
-    document.getElementById("outputBox").textContent =  "Name: " + user.name + "\n mail: " + user.email + 
-                                                        "\n User Name: " + user.userName + "\n Password: " + user.password;
-}
+export default Signup;
