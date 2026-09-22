@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
     Box,
     Button,
@@ -7,7 +6,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import "./sign_up.css"
+import "./sign_up.css";
 
 function Signup() {
     return (
