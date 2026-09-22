@@ -1,0 +1,23 @@
+.signUp-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #eef3f8;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.signUp-card {
+    width: 350px;
+    padding: 45px;
+    background: white;
+    border: 1px solid #d9e1e8;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(23, 50, 77, 0.12);
+    text-align: center;
+}
+
+.signUp-button {
+    padding: 10px;
+    margin-top: 12px;
+}
