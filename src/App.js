@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Dashboard from "./views/Dashboard";
 
+import Dashboard from "./views/Dashboard";
 import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
+import Signup from "./views/sign_up";
 
 function App() {
     return (
@@ -29,6 +30,11 @@ function App() {
                 <Route
                     path="/dashboard"
                     component={Dashboard}
+                />
+
+                <Route
+                    path="/register"
+                    component={Signup}
                 />
             </Switch>
         </BrowserRouter>
