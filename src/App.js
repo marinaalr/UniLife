@@ -6,6 +6,7 @@ import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
 import Signup from "./views/sign_up";
+import Profile from "./views/Profile";
 
 function App() {
     return (
@@ -35,6 +36,11 @@ function App() {
                 <Route
                     path="/register"
                     component={Signup}
+                />
+
+                <Route
+                    path="/profile"
+                    component={Profile}
                 />
             </Switch>
         </BrowserRouter>

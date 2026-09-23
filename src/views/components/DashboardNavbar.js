@@ -14,7 +14,7 @@ import {
     Notifications as NotificationsIcon,
     AccountCircle as AccountCircleIcon
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function DashboardNavbar() {
     // Store the element that opens the notifications menu.
@@ -41,6 +41,13 @@ function DashboardNavbar() {
     // Close the profile menu.
     const closeProfile = () => {
         setProfileAnchor(null);
+    };
+
+    const history = useHistory();
+
+    const handleLogout = () => {
+        localStorage.removeItem("profile");
+        history.push("/login");
     };
 
     return (
@@ -139,7 +146,11 @@ function DashboardNavbar() {
                         open={Boolean(profileAnchor)}
                         onClose={closeProfile}
                     >
-                        <MenuItem onClick={closeProfile}>
+                        <MenuItem 
+                            component={Link}
+                            to="/profile"
+                            onClick={closeProfile}
+                        >
                             Profile
                         </MenuItem>
 
@@ -147,7 +158,7 @@ function DashboardNavbar() {
                             Settings
                         </MenuItem>
 
-                        <MenuItem onClick={closeProfile}>
+                        <MenuItem onClick={handleLogout}>
                             Log out
                         </MenuItem>
                     </Menu>
