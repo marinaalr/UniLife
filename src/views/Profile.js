@@ -23,23 +23,62 @@ function Profile() {
     const [username, setUsername] = useState(savedProfile.username);
     const [email, setEmail] = useState(savedProfile.email);
     const [saved, setSaved] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSave = (event) => {
-        event.preventDefault();
+    const handleSave = async (event) => {
+    event.preventDefault();
 
-        const profileData = {
-            name,
-            username,
-            email
-        };
+    setError("");
+    setSaved(false);
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        setError("You are not logged in.");
+        return;
+    }
+
+    const profileData = {
+        name,
+        username,
+        email
+    };
+
+    try {
+        const response = await fetch(
+            "http://localhost:5000/api/auth/profile",
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(profileData)
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            setError(data.message);
+            return;
+        }
 
         localStorage.setItem(
             "profile",
-            JSON.stringify(profileData)
+            JSON.stringify(data.user)
         );
 
+        setName(data.user.name);
+        setUsername(data.user.username);
+        setEmail(data.user.email);
+
         setSaved(true);
-    };
+    } catch {
+        setError("Could not connect to the server.");
+    }
+};
+
 
     return (
         <Box className="profile-page">
@@ -115,6 +154,12 @@ function Profile() {
                             >
                                 Save Changes
                             </Button>
+
+                            {error && (
+                                <Typography color="error">
+                                    {error}
+                                </Typography>
+                            )}
 
                             {saved && (
                                 <Typography className="profile-saved-message">
