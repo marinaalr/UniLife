@@ -4,7 +4,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
-import Signup from "./views/sign_up"
+import Signup from "./views/sign_up";
+import Events from "./views/Events";
 
 function App() {
     return (
@@ -29,6 +30,11 @@ function App() {
                 <Route
                     path="/register"
                     component={Signup}
+                />
+
+                <Route
+                    path="/events"
+                    component={Events}
                 />
             </Switch>
         </BrowserRouter>

@@ -20,7 +20,7 @@ function Navbar () {
                 {/* Navigation Buttons */} 
                 <Button color="inherit">Home</Button>
                 <Button color="inherit">Calendar</Button>
-                <Button color="inherit">Events</Button>
+                <Button color="inherit" component={Link} to="/events">Events</Button>
                 <Button color="inherit">Tasks</Button>
 
 
