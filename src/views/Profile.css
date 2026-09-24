@@ -1,0 +1,55 @@
+.profile-page {
+    min-height: 100vh;
+    background: #eef3f8;
+}
+
+.profile-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 45px 30px;
+}
+
+.profile-introduction {
+    margin-bottom: 30px;
+}
+
+.profile-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: #17324d;
+}
+
+.profile-subtitle {
+    margin-top: 8px;
+    color: #667085;
+    font-size: 17px;
+}
+
+.profile-card {
+    background: white;
+    border: 1px solid #d9e1e8;
+    border-radius: 18px;
+}
+
+.profile-section-title {
+    margin-bottom: 25px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: #17324d;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-save-button {
+    align-self: flex-start;
+    margin-top: 5px;
+}
+
+.profile-saved-message {
+    color: #4a7c59;
+    font-size: 14px;
+}
