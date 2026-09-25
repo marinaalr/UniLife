@@ -4,8 +4,6 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
-import TasksPage from "./views/TasksPage";
-
 
 function App() {
     return (
@@ -28,11 +26,6 @@ function App() {
 
                 />
 
-                <Route
-                    path="/tasks"
-                    component={TasksPage}
-                    
-                />
             </Switch>
         </BrowserRouter>
     );
