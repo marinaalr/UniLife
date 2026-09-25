@@ -46,6 +46,7 @@ function DashboardNavbar() {
     const history = useHistory();
 
     const handleLogout = () => {
+        localStorage.removeItem("token");
         localStorage.removeItem("profile");
         history.push("/login");
     };
@@ -154,7 +155,11 @@ function DashboardNavbar() {
                             Profile
                         </MenuItem>
 
-                        <MenuItem onClick={closeProfile}>
+                        <MenuItem
+                            component={Link}
+                            to="/settings" 
+                            onClick={closeProfile}
+                        >
                             Settings
                         </MenuItem>
 

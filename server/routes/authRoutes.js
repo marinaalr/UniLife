@@ -3,7 +3,8 @@ const express = require("express");
 const {
     register,
     login,
-    updateProfile
+    updateProfile,
+    changeUserPassword
 } = require("../controllers/authController");
 
 const authenticateToken = require("../middleware/authMiddleware");
@@ -21,6 +22,12 @@ router.put(
     "/profile",
     authenticateToken,
     updateProfile
+);
+
+router.put(
+    "/password",
+    authenticateToken,
+    changeUserPassword
 );
 
 module.exports = router;

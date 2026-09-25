@@ -4,8 +4,10 @@ const jwt = require("jsonwebtoken");
 const {
     getUsers,
     findUser,
+    findUserById,
     createUser,
-    updateUser
+    updateUser,
+    changePassword
 } = require("../models/User");
 
 // Register a new user
@@ -15,7 +17,7 @@ const register = async (req, res) => {
             name,
             username,
             email,
-            password
+            password,
         } = req.body;
 
         if (!name || !username || !email || !password) {
@@ -115,7 +117,12 @@ const login = async (req, res) => {
                 id: user.id,
                 name: user.name,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                profilePicture: user.profilePicture || "",
+                university: user.university || "",
+                program: user.program || "",
+                yearOfStudy: user.yearOfStudy || "",
+                bio: user.bio || ""
             }
         });
     } catch (error) {
@@ -130,7 +137,12 @@ const updateProfile = (req, res) => {
         const {
             name,
             username,
-            email
+            email,
+            profilePicture,
+            university,
+            program,
+            yearOfStudy,
+            bio
         } = req.body;
 
         if (!name || !username || !email) {
@@ -168,7 +180,12 @@ const updateProfile = (req, res) => {
         const updatedUser = updateUser(req.user.id, {
             name,
             username,
-            email
+            email,
+            profilePicture,
+            university,
+            program,
+            yearOfStudy,
+            bio
         });
 
         if (!updatedUser) {
@@ -183,7 +200,12 @@ const updateProfile = (req, res) => {
                 id: updatedUser.id,
                 name: updatedUser.name,
                 username: updatedUser.username,
-                email: updatedUser.email
+                email: updatedUser.email,
+                profilePicture: updatedUser.profilePicture,
+                university: updatedUser.university,
+                program: updatedUser.program,
+                yearOfStudy: updatedUser.yearOfStudy,
+                bio: updatedUser.bio
             }
         });
     } catch {
@@ -193,8 +215,66 @@ const updateProfile = (req, res) => {
     }
 };
 
+const changeUserPassword = async (req, res) => {
+    const {
+        currentPassword,
+        newPassword
+    } = req.body;
+
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+            message: "Please enter your current and new password."
+        });
+    }
+    const user = findUserById(req.user.id);
+
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found."
+        });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+        currentPassword,
+        user.password
+    );
+
+    if (!passwordMatch) {
+        return res.status(400).json({
+            message: "Current password is incorrect."
+        });
+    }
+
+    if (newPassword.length < 6) {
+        return res.status(400).json({
+            message: "New password must be at least 6 characters."
+        });
+    }
+
+    const hashedPassword = await bcrypt.hash(
+        newPassword,
+        10
+    );
+
+    const updatedUser = changePassword(
+        req.user.id,
+        hashedPassword
+    );
+
+    if (!updatedUser) {
+        return res.status(404).json({
+            message: "User not found"
+        });
+    }
+
+    return res.json({
+        message: "Password changed successfully."
+    })
+}
+
 module.exports = {
     register,
     login,
-    updateProfile
+    updateProfile,
+    changeUserPassword
 };
