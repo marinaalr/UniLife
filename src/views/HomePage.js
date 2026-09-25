@@ -1,6 +1,7 @@
-// Import the Navbar component
+// Import components
 import Navbar from './components/Navbar';
 import universityImage from '../assets/university.jpg';
+import { Link } from "react-router-dom";
 
 // Import Material UI components
 import { Box, Typography, Button, Card, CardContent} from '@mui/material';
@@ -10,7 +11,7 @@ import { Box, Typography, Button, Card, CardContent} from '@mui/material';
 function HomePage() {
   return (
 
-    // Make the page at least as high as the screen
+    // Main page container
     <Box
       sx={{
         minHeight: '100vh',
@@ -22,7 +23,7 @@ function HomePage() {
       {/* Show the navbar */}
       <Navbar />
 
-        {/* Center the welcome text */}
+        {/* Hero section */}
         <Box
           sx={{
             background: "linear-gradient(135deg, #dbeafe, #ede9fe)",
@@ -58,12 +59,16 @@ function HomePage() {
           >
             <Button
                variant="contained"
+               component={Link}
+               to="/register"
                sx={{ borderRadius: "10px", fontWeight: 600 }}
             >
               Get Started
             </Button>
 
-          <Button variant="outlined" sx={{ borderRadius: "10px", fontWeight: 600}}>
+          <Button variant="outlined"
+            href="#features" 
+            sx={{ borderRadius: "10px", fontWeight: 600}}>
             Learn More
           </Button>
         </Box>
@@ -83,6 +88,7 @@ function HomePage() {
 
           {/* FEATURE SECTION */}
       <Box
+        id="features"
         sx={{
           padding: 6,
           backgroundColor: "#ffffff"
@@ -433,6 +439,8 @@ function HomePage() {
 
         <Button
           variant="contained"
+          component={Link}
+          to="/register"
           sx={{
             borderRadius: "12px",
             padding: "12px 28px",
