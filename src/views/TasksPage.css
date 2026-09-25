@@ -1,0 +1,747 @@
+/* Whole Tasks page */
+.tasks-page {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 50px 32px 70px;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: #1f2937;
+}
+
+
+/* Page header */
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.tasks-header h4 {
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    color: #172033;
+}
+
+.tasks-subtitle {
+    color: #7b8495;
+    margin-top: 6px;
+    font-size: 15px;
+}
+
+
+/* New list form */
+.new-list-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 30px;
+    padding: 18px;
+
+    background: #ffffff;
+    border: 1px solid #e7eaf0;
+    border-radius: 14px;
+
+    box-shadow: 0 4px 18px rgba(30, 45, 70, 0.06);
+}
+
+
+/* Main layout */
+.tasks-content {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+}
+
+
+/* LEFT SIDEBAR */
+.tasks-sidebar {
+    width: 230px;
+    min-height: 300px;
+
+    background: #f7f9fc;
+
+    border: 1px solid #e8ebf0;
+    border-radius: 18px;
+
+    padding: 22px 16px;
+}
+
+.sidebar-title {
+    color: #9299a6;
+
+    font-size: 11px !important;
+    font-weight: 700 !important;
+
+    letter-spacing: 1.2px;
+
+    margin: 0 10px 14px !important;
+}
+
+
+/* One list */
+.list-item {
+    padding: 12px 14px;
+    margin-bottom: 5px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #4b5565;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.list-item:hover {
+    background-color: #edf1f7;
+    transform: translateX(2px);
+}
+
+
+/* Selected list */
+.active-list {
+    background-color: #e7efff;
+    color: #2859a8;
+    font-weight: 650;
+}
+
+
+/* RIGHT TASK PANEL */
+.task-panel {
+    flex: 1;
+
+    min-height: 430px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7eaf0;
+    border-radius: 18px;
+
+    padding: 30px;
+
+    box-shadow: 0 8px 30px rgba(31, 45, 65, 0.07);
+}
+
+
+/* List header */
+.task-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.task-panel-header h5 {
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #172033;
+}
+
+
+/* List title with edit button */
+.list-title-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+/* Edit list name */
+.edit-list-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 500px;
+}
+
+
+.task-count {
+    color: #8a93a2;
+    margin-top: 5px;
+    font-size: 14px !important;
+}
+
+
+/* Empty page */
+.empty-panel {
+    text-align: center;
+    padding: 90px 20px;
+}
+
+.empty-panel h5 {
+    color: #3d4655;
+    font-weight: 600;
+}
+
+.empty-message {
+    color: #9aa2ae !important;
+    margin-top: 16px !important;
+    font-size: 14px !important;
+}
+
+
+/* PROGRESS BAR */
+.progress-background {
+    width: 100%;
+    height: 7px;
+
+    background-color: #edf0f4;
+
+    border-radius: 20px;
+
+    margin-top: 22px;
+
+    overflow: hidden;
+}
+
+.progress-value {
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #4f7ddf,
+        #7198ec
+    );
+
+    border-radius: 20px;
+
+    transition: width 0.35s ease;
+}
+
+
+/* FILTER BUTTONS */
+.task-filters {
+    display: flex;
+    gap: 5px;
+
+    margin-top: 25px;
+    margin-bottom: 18px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #edf0f3;
+}
+
+.task-filters button {
+    text-transform: none;
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+
+/* Task container */
+.task-container {
+    width: 100%;
+}
+
+
+/* ONE TASK */
+.task-row {
+    display: flex;
+    align-items: center;
+
+    padding: 16px 5px;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    transition:
+        background-color 0.2s ease,
+        padding 0.2s ease;
+}
+
+.task-row:hover {
+    background-color: #fafbfc;
+
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border-radius: 10px;
+}
+
+
+/* Task information */
+.task-info {
+    flex: 1;
+    text-align: left;
+}
+
+.task-name {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+
+    color: #303846;
+}
+
+.task-description {
+    color: #858e9d !important;
+
+    font-size: 13px !important;
+
+    margin-top: 4px !important;
+}
+
+
+/* Completed task */
+.completed-task {
+    text-decoration: line-through;
+    color: #a6adb8 !important;
+}
+
+
+/* Task action buttons */
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+
+/* PRIORITY + DEADLINE */
+.task-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 9px;
+
+    font-size: 12px;
+}
+
+
+/* Priority badge */
+.priority {
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* Low priority */
+.priority-low {
+    background-color: #e9f7ef;
+    color: #34835a;
+}
+
+
+/* Medium priority */
+.priority-medium {
+    background-color: #fff4dc;
+    color: #b97917;
+}
+
+
+/* High priority */
+.priority-high {
+    background-color: #fdeaea;
+    color: #c54a4a;
+}
+
+
+/* Deadline */
+.deadline {
+    color: #7d8795;
+}
+
+
+/* Overdue deadline */
+.overdue {
+    color: #c94c4c;
+    font-weight: 600;
+}
+
+
+/* ADD TASK BUTTON */
+.add-task-button {
+    margin-top: 22px !important;
+
+    text-transform: none !important;
+
+    font-weight: 600 !important;
+
+    border-radius: 9px !important;
+}
+
+
+/* NEW TASK FORM */
+.new-task-form {
+    margin-top: 25px;
+
+    padding: 24px;
+
+    background-color: #f8f9fb;
+
+    border: 1px solid #e8ebef;
+
+    border-radius: 14px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.new-task-form h6 {
+    font-weight: 650;
+    color: #303846;
+}
+
+
+/* EDIT TASK FORM */
+.edit-task-form {
+    margin: 12px 0;
+
+    padding: 22px;
+
+    background-color: #f8f9fb;
+
+    border: 1px solid #e5e9ef;
+    border-radius: 14px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.edit-task-form h6 {
+    font-weight: 650;
+    color: #303846;
+}
+
+
+/* Deadline + priority */
+.task-form-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+
+/* Deadline field */
+.date-field {
+    flex: 1;
+}
+
+
+/* Priority field */
+.priority-field {
+    width: 170px;
+}
+
+
+/* Small label above fields */
+.field-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+
+    color: #687386 !important;
+
+    margin-bottom: 7px !important;
+    margin-left: 2px !important;
+}
+
+
+.priority-select {
+    width: 100%;
+}
+
+
+/* Form buttons */
+.task-form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.task-form-buttons button {
+    text-transform: none;
+    border-radius: 9px;
+    font-weight: 600;
+}
+
+
+/* Material UI buttons */
+.tasks-page .MuiButton-root {
+    text-transform: none;
+    box-shadow: none;
+}
+
+
+/* Delete and edit buttons */
+.tasks-page .MuiIconButton-root {
+    color: #9aa2ae;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.tasks-page .MuiIconButton-root:hover {
+    color: #5275b8;
+    background-color: #eef3fc;
+}
+
+
+/* Delete button becomes red on hover */
+.task-actions .MuiIconButton-root:last-child:hover {
+    color: #c94c4c;
+    background-color: #fff0f0;
+}
+
+
+/* Text fields */
+.tasks-page .MuiOutlinedInput-root {
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+
+/* Make date field clean */
+.date-field input[type="date"] {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: #303846;
+}
+
+
+/* Smaller screens */
+@media (max-width: 750px) {
+
+    .tasks-page {
+        padding: 30px 18px;
+    }
+
+    .tasks-header {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .tasks-content {
+        flex-direction: column;
+    }
+
+    .tasks-sidebar {
+        width: auto;
+    }
+
+    .task-panel {
+        width: auto;
+        padding: 22px;
+    }
+
+    .task-form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .priority-field {
+        width: 100%;
+    }
+
+    .new-list-form {
+        flex-wrap: wrap;
+    }
+
+    .edit-list-form {
+        flex-wrap: wrap;
+    }
+}
+
+/* ============================= */
+/* POPUP DIALOGS                 */
+/* ============================= */
+
+
+/* Main popup window */
+.MuiDialog-paper {
+    border-radius: 18px !important;
+
+    padding: 8px 10px 12px;
+
+    border: 1px solid #edf0f4;
+
+    box-shadow:
+        0 20px 60px rgba(31, 45, 65, 0.16) !important;
+}
+
+
+/* Icon circle */
+.dialog-icon {
+    width: 52px;
+    height: 52px;
+
+    margin: 24px auto 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+}
+
+
+/* Icon size */
+.dialog-icon svg {
+    font-size: 26px;
+}
+
+
+/* Warning / invalid date icon */
+.error-dialog-icon {
+    background-color: #fff7e8;
+    color: #d28a20;
+}
+
+
+/* Delete icon */
+.delete-dialog-icon {
+    background-color: #fff0f0;
+    color: #d05252;
+}
+
+
+/* Popup title */
+.custom-dialog-title {
+    text-align: center;
+
+    padding-top: 8px !important;
+    padding-bottom: 6px !important;
+
+    color: #172033;
+
+    font-size: 20px !important;
+    font-weight: 700 !important;
+
+    letter-spacing: -0.3px;
+}
+
+
+/* Popup message */
+.custom-dialog-text {
+    max-width: 350px;
+
+    margin: 0 auto !important;
+
+    text-align: center;
+
+    color: #7b8495 !important;
+
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+
+/* Space around popup text */
+.MuiDialogContent-root {
+    padding: 8px 28px 10px !important;
+}
+
+
+/* Buttons area */
+.custom-dialog-actions {
+    display: flex;
+
+    justify-content: center !important;
+
+    gap: 10px;
+
+    padding: 16px 24px 18px !important;
+}
+
+
+/* All popup buttons */
+.custom-dialog-actions .MuiButton-root {
+    min-width: 105px;
+
+    padding: 8px 18px;
+
+    border-radius: 10px;
+
+    text-transform: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    box-shadow: none;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+/* Small hover movement */
+.custom-dialog-actions .MuiButton-root:hover {
+    transform: translateY(-1px);
+
+    box-shadow: none;
+}
+
+
+/* Cancel button */
+.custom-dialog-actions .MuiButton-root:not(.MuiButton-contained) {
+    color: #687386;
+
+    background-color: #f4f6f8;
+
+    border: 1px solid #e5e9ef;
+}
+
+
+/* Cancel hover */
+.custom-dialog-actions .MuiButton-root:not(.MuiButton-contained):hover {
+    background-color: #eaedf2;
+}
+
+
+/* Delete button */
+.custom-dialog-actions .MuiButton-containedError {
+    background-color: #d75b5b;
+}
+
+
+/* Delete button hover */
+.custom-dialog-actions .MuiButton-containedError:hover {
+    background-color: #c94c4c;
+}
+
+
+/* Normal blue OK button */
+.custom-dialog-actions .MuiButton-containedPrimary {
+    background-color: #5275b8;
+}
+
+
+/* Normal blue OK button hover */
+.custom-dialog-actions .MuiButton-containedPrimary:hover {
+    background-color: #4567a7;
+}

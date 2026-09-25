@@ -27,6 +27,7 @@ function App() {
                 <Route
                     path="/forgot-password"
                     component={ForgotPassword}
+
                 />
 
                 <Route
