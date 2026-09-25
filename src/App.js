@@ -9,6 +9,7 @@ import Signup from "./views/sign_up";
 import Profile from "./views/Profile";
 import Settings from "./views/Settings";
 import TasksPage from "./views/TasksPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
     return (
@@ -51,7 +52,7 @@ function App() {
                     component={Settings}
                 />
 
-                <Route
+                <ProtectedRoute
                     path="/tasks"
                     component={TasksPage}
                 />
