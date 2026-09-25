@@ -3,9 +3,28 @@ import { Button, TextField, Toolbar, Typography } from "@mui/material";
 import "./Events.css"
 import Navbar from './components/Navbar';
 
-
 function Events() {
     const [isOpen, setIsOpen] = useState(false);
+
+    const [events, setEvents] = useState([]);
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState("");
+    const [date, setDate] = useState("");
+
+    const createEvent = () => {
+        const newEvent = {
+            id: Date.now(),
+            name,
+            date,
+            location
+        };
+
+        setEvents([...events, newEvent]);
+
+        setName("");
+        setDate("");
+        setLocation("");
+    };
     return (
         <box>
             <Navbar />
@@ -30,6 +49,7 @@ function Events() {
                     <div className="addEventWindow">
                         <div
                             className="popup"
+                            component="form"
                             onClick={(e) => e.stopPropagation}
                         >
                             <Typography
@@ -50,6 +70,8 @@ function Events() {
                                 type="text"
                                 required
                                 margin="normal"
+                                value={name}
+                                onChange={(event) => setName(event.target.value)}
                             />
 
                             <TextField
@@ -58,6 +80,8 @@ function Events() {
                                 type="text"
                                 required
                                 margin="normal"
+                                value={location}
+                                onChange={(event) => setLocation(event.target.value)}
                             />
 
                             <TextField
@@ -65,9 +89,11 @@ function Events() {
                                 type="date"
                                 required
                                 margin="normal"
+                                value={date}
+                                onChange={(event) => setDate(event.target.value)}
                             />
 
-                            <Button>
+                            <Button onClick={createEvent}>
                                 Create
                             </Button>
 
@@ -78,6 +104,14 @@ function Events() {
                     </div>
                 )}
             </Toolbar>
+            <div className="eventBox">
+                {events.map((event) => (
+                    <div className="eventDisplay" key={event.id}>
+                        <h2 className="eventName">{event.name}</h2>
+                        <p className="info">{event.location} {event.date} </p>
+                    </div>
+                ))}
+            </div>
         </box>
     )
 }

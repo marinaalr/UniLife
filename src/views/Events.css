@@ -1,5 +1,9 @@
 .event-toolbar {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     background-color: white;
+    border: 1px solid black;
 }
 
 .searchBar {
@@ -35,4 +39,26 @@
     background: none;
     font-size: 24px;
     cursor: pointer;
+}
+
+.eventBox {
+    width: 90%;
+    margin: 5%;
+    background-color: white;
+}
+
+.eventDisplay {
+    margin: 1%;
+    padding: 1px;
+    border-radius: 12px;
+    border: 1px solid black;
+}
+
+.eventName {
+    margin: 1%;
+}
+
+.info {
+    margin-right: 1%;
+    text-align: right;
 }
