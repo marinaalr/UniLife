@@ -8,6 +8,7 @@ import Login from "./views/Login";
 import Signup from "./views/sign_up";
 import Profile from "./views/Profile";
 import Settings from "./views/Settings";
+import TasksPage from "./views/TasksPage";
 
 function App() {
     return (
@@ -49,6 +50,13 @@ function App() {
                     path="/settings"
                     component={Settings}
                 />
+
+                <Route
+                    path="/tasks"
+                    component={TasksPage}
+                />
+
+
             </Switch>
         </BrowserRouter>
     );
