@@ -21,7 +21,15 @@ function Navbar () {
                 <Button color="inherit">Home</Button>
                 <Button color="inherit">Calendar</Button>
                 <Button color="inherit">Events</Button>
-                <Button color="inherit">Tasks</Button>
+                
+                
+                <Button
+                    color="inherit"
+                    component={Link}
+                    to="/tasks"
+                >
+                    Tasks
+                </Button>
 
 
                 {/* Push login buttons to the right */}
