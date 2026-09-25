@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Navbar from './components/Navbar';
+import DashboardNavbar from './components/DashboardNavbar';
 
 import {
   Box,
@@ -20,6 +20,7 @@ function TasksPage() {
 
   // Store all lists
   const [lists, setLists] = useState([]);
+  const [tasksLoaded, setTasksLoaded] = useState(false);
 
   // Store the selected list
   const [selectedListId, setSelectedListId] = useState(null);
@@ -61,6 +62,75 @@ function TasksPage() {
   // Store what should be deleted
   const [deleteType, setDeleteType] = useState(null);
   const [deleteTaskId, setDeleteTaskId] = useState(null);
+
+
+// Load the logged in user's tasks
+// First UseEffect bring the saved tasks
+// Second UseEffect is used when lists changes 
+useEffect(() => {
+  async function loadTasks() {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/tasks",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setLists(data.lists);
+
+        if (data.lists.length > 0) {
+          setSelectedListId(data.lists[0].id);
+        }
+
+        setTasksLoaded(true);
+      }
+    } catch {
+      console.log("Could not load tasks.");
+    }
+  }
+
+  loadTasks();
+}, []);
+
+
+// Save tasks whenever the lists change
+useEffect(() => {
+  if (!tasksLoaded) {
+    return;
+  }
+
+  async function saveTasks() {
+    const token = localStorage.getItem("token");
+
+    try {
+      await fetch(
+        "http://localhost:5000/api/tasks",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            lists: lists
+          })
+        }
+      );
+    } catch {
+      console.log("Could not save tasks.");
+    }
+  }
+
+  saveTasks();
+}, [lists, tasksLoaded]);
 
 
   // Get today's date
@@ -534,7 +604,7 @@ function TasksPage() {
 
   return (
     <>
-      <Navbar />
+      <DashboardNavbar />
 
 
       <Box className="tasks-page">
