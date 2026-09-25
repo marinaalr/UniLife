@@ -1,0 +1,59 @@
+/* Settings page */
+.settings-page {
+    min-height: 100vh;
+    background: #eef3f8;
+}
+
+.settings-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 45px 30px;
+}
+
+/* Page heading */
+.settings-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: #17324d;
+}
+
+.settings-subtitle {
+    margin-top: 8px;
+    color: #667085;
+    font-size: 17px;
+}
+
+/* Account settings */
+.settings-card {
+    margin-top: 30px;
+    background: white;
+    border: 1px solid #d9e1e8;
+    border-radius: 18px;
+}
+
+.settings-card .MuiCardContent-root {
+    padding: 32px;
+}
+
+.settings-section-title {
+    margin-bottom: 20px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: #17324d;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.settings-save-button {
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+.settings-success-message {
+    color: #4a7c59;
+    font-size: 14px;
+}

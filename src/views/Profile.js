@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+    Avatar,
     Box,
     Button,
     Card,
@@ -22,8 +23,46 @@ function Profile() {
     const [name, setName] = useState(savedProfile.name);
     const [username, setUsername] = useState(savedProfile.username);
     const [email, setEmail] = useState(savedProfile.email);
+    
+    const [profilePicture, setProfilePicture] = useState(
+        savedProfile.profilePicture || ""
+    );
+
+    const [university,setUniversity] = useState(
+        savedProfile.university || ""
+    );
+
+    const [program, setProgram] = useState(
+        savedProfile.program || ""
+    );
+
+    const [yearOfStudy, setYearOfStudy] = useState(
+        savedProfile.yearOfStudy || ""
+    );
+
+    const [bio, setBio] = useState(
+        savedProfile.bio || ""
+    );
+
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState("");
+
+
+    const handleProfilePictureChange = (event) => {
+        const file = event.target.files[0];
+
+        if(!file) {
+            return;
+        }
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setProfilePicture(reader.result);
+            setSaved(false);
+        };
+
+        reader.readAsDataURL(file);
+    };
 
     const handleSave = async (event) => {
     event.preventDefault();
@@ -41,7 +80,12 @@ function Profile() {
     const profileData = {
         name,
         username,
-        email
+        email,
+        profilePicture,
+        university,
+        program,
+        yearOfStudy,
+        bio
     };
 
     try {
@@ -79,7 +123,6 @@ function Profile() {
     }
 };
 
-
     return (
         <Box className="profile-page">
             <DashboardNavbar />
@@ -107,6 +150,42 @@ function Profile() {
                         >
                             Personal Information
                         </Typography>
+
+                        <Box className="profile-picture-section">
+                            <Avatar
+                               src={profilePicture}
+                               alt="Profile picture"
+                               sx={{ width: 100, height: 100 }}
+                            >
+                                {name ? name.charAt(0).toUpperCase() : "U"}
+                            </Avatar>
+
+                            <Button
+                               variant="outlined"
+                               component="label"
+                            >
+                                {profilePicture ? "Change Picture" : "Upload Picture"}
+                                <input
+                                   type="file"
+                                   accept="image/*"
+                                   hidden
+                                   onChange={handleProfilePictureChange}
+                                />
+                            </Button>
+
+                            {profilePicture && (
+                                <Button
+                                   variant="outlined"
+                                   color="error"
+                                   onClick={() => {
+                                      setProfilePicture("")
+                                      setSaved(false);
+                                   }}
+                                >
+                                    Remove Picture
+                                </Button>
+                            )}
+                        </Box>
 
                         <Box
                             component="form"
@@ -145,6 +224,48 @@ function Profile() {
                                     setSaved(false);
                                 }}
                                 required
+                            />
+
+                            <TextField
+                                fullWidth
+                                label="University"
+                                value={university}
+                                onChange={(event) => {
+                                    setUniversity(event.target.value);
+                                    setSaved(false);
+                                }}
+                            />
+
+                            <TextField
+                                fullWidth
+                                label="Program / Degree"
+                                value={program}
+                                onChange={(event) => {
+                                    setProgram(event.target.value);
+                                    setSaved(false);
+                                }}
+                            />
+
+                            <TextField
+                                fullWidth
+                                label="Year of Study"
+                                value={yearOfStudy}
+                                onChange={(event) => {
+                                    setYearOfStudy(event.target.value);
+                                    setSaved(false);
+                                }}
+                            />
+
+                            <TextField
+                                fullWidth
+                                label="About Me"
+                                value={bio}
+                                onChange={(event) => {
+                                    setBio(event.target.value);
+                                    setSaved(false);
+                                }}
+                                multiline
+                                rows={4}
                             />
 
                             <Button

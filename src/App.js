@@ -7,6 +7,7 @@ import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
 import Signup from "./views/sign_up";
 import Profile from "./views/Profile";
+import Settings from "./views/Settings";
 
 function App() {
     return (
@@ -41,6 +42,11 @@ function App() {
                 <Route
                     path="/profile"
                     component={Profile}
+                />
+
+                <Route
+                    path="/settings"
+                    component={Settings}
                 />
             </Switch>
         </BrowserRouter>
