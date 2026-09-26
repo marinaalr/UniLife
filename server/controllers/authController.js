@@ -3,15 +3,6 @@ const jwt = require("jsonwebtoken");
 
 const MongoUser = require("../models/MongoUser");
 
-const {
-  getUsers,
-  findUser,
-  findUserById,
-  createUser,
-  updateUser,
-  changePassword,
-} = require("../models/User");
-
 // Register a new user
 const register = async (req, res) => {
   try {
@@ -130,7 +121,7 @@ const login = async (req, res) => {
   }
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = async (req, res) => {
   try {
     const {
       name,
@@ -149,15 +140,15 @@ const updateProfile = (req, res) => {
       });
     }
 
-    const users = getUsers();
+    const usernameTaken = await MongoUser.findOne({
+      username: username,
+      _id: { $ne: req.user.id },
+    });
 
-    const usernameTaken = users.find(
-      (user) => user.username === username && user.id !== req.user.id,
-    );
-
-    const emailTaken = users.find(
-      (user) => user.email === email && user.id !== req.user.id,
-    );
+    const emailTaken = await MongoUser.findOne({
+      email: email,
+      _id: { $ne: req.user.id },
+    });
 
     if (usernameTaken) {
       return res.status(409).json({
@@ -171,16 +162,22 @@ const updateProfile = (req, res) => {
       });
     }
 
-    const updatedUser = updateUser(req.user.id, {
-      name,
-      username,
-      email,
-      profilePicture,
-      university,
-      program,
-      yearOfStudy,
-      bio,
-    });
+    const updatedUser = await MongoUser.findByIdAndUpdate(
+      req.user.id,
+      {
+        name,
+        username,
+        email,
+        profilePicture,
+        university,
+        program,
+        yearOfStudy,
+        bio,
+      },
+      {
+        new: true,
+      },
+    );
 
     if (!updatedUser) {
       return res.status(404).json({
@@ -217,7 +214,7 @@ const changeUserPassword = async (req, res) => {
       message: "Please enter your current and new password.",
     });
   }
-  const user = findUserById(req.user.id);
+  const user = await MongoUser.findById(req.user.id);
 
   if (!user) {
     return res.status(404).json({
@@ -241,7 +238,15 @@ const changeUserPassword = async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  const updatedUser = changePassword(req.user.id, hashedPassword);
+  const updatedUser = await MongoUser.findByIdAndUpdate(
+    req.user.id,
+    {
+      password: hashedPassword,
+    },
+    {
+      new: true,
+    },
+  );
 
   if (!updatedUser) {
     return res.status(404).json({
