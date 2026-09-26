@@ -1,15 +1,58 @@
 import React, { useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { useHistory } from "react-router-dom";
+
+import {
+    Box,
+    Button,
+    TextField,
+    Typography
+} from "@mui/material";
 
 function LoginForm() {
+    const history = useHistory();
+
     const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-    const handleLogin = (event) => {
+    // Handle login.
+    const handleLogin = async (event) => {
         event.preventDefault();
+        setError("");
 
-        console.log("Username or Email:", identifier);
-        console.log("Password:", password);
+        try {
+            const response = await fetch(
+                "http://localhost:5000/api/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier,
+                        password
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.message);
+                return;
+            }
+
+            localStorage.setItem("token", data.token);
+
+            localStorage.setItem(
+                "profile",
+                JSON.stringify(data.user)
+            );
+
+            history.push("/dashboard");
+        } catch {
+            setError("Could not connect to the server.");
+        }
     };
 
     return (
@@ -19,9 +62,10 @@ function LoginForm() {
                 label="Username or Email"
                 type="text"
                 value={identifier}
-                onChange={(event) =>
-                    setIdentifier(event.target.value)
-                }
+                onChange={(event) => {
+                    setIdentifier(event.target.value);
+                    setError("");
+                }}
                 required
                 margin="normal"
             />
@@ -31,9 +75,10 @@ function LoginForm() {
                 label="Password"
                 type="password"
                 value={password}
-                onChange={(event) =>
-                    setPassword(event.target.value)
-                }
+                onChange={(event) => {
+                    setPassword(event.target.value);
+                    setError("");
+                }}
                 required
                 margin="normal"
             />
@@ -46,6 +91,15 @@ function LoginForm() {
             >
                 Login
             </Button>
+
+            {error && (
+                <Typography
+                    color="error"
+                    sx={{ marginTop: 2 }}
+                >
+                    {error}
+                </Typography>
+            )}
         </Box>
     );
 }
