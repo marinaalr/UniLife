@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, TextField, Toolbar, Typography } from "@mui/material";
+import { Button, TextField, Toolbar, Typography, Box } from "@mui/material";
 import "./Events.css"
 import Navbar from './components/Navbar';
 
@@ -26,7 +26,7 @@ function Events() {
         setLocation("");
     };
     return (
-        <box>
+        <Box className="eventPage">
             <Navbar />
 
             <Toolbar className="event-toolbar">
@@ -112,7 +112,7 @@ function Events() {
                     </div>
                 ))}
             </div>
-        </box>
+        </Box>
     )
 }
 
