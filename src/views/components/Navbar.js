@@ -24,21 +24,6 @@ function Navbar () {
                 UniLife
                 </Typography>
 
-                {/* Navigation Buttons */} 
-                <Button color="inherit">Home</Button>
-                <Button color="inherit">Calendar</Button>
-                <Button color="inherit">Events</Button>
-                
-                
-                <Button
-                    color="inherit"
-                    component={Link}
-                    to="/tasks"
-                >
-                    Tasks
-                </Button>
-
-
                 {/* Push login buttons to the right */}
                 <Box sx={{ marginLeft: 'auto' }}>  {/*bobxen trycks så långs åt häger som möjligt*/}
                     <Button 
