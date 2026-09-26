@@ -75,6 +75,31 @@ function Dashboard() {
       return a.deadline.localeCompare(b.deadline);
     });
 
+  // Find pending tasks with a deadline within the next 7 days.
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const fiveDaysFromNow = new Date(todayStart);
+  fiveDaysFromNow.setDate(todayStart.getDate() + 5);
+
+  const approachingDeadlines = pendingTasks.filter((task) => {
+    if (!task.deadline) {
+      return false;
+    }
+
+    const deadlineDate = new Date(`${task.deadline}T00:00:00`);
+
+    return deadlineDate >= todayStart && deadlineDate <= fiveDaysFromNow;
+  });
+
+  // Calculate how many days are left until the deadline.
+  function getDaysLeft(deadline) {
+    const deadlineDate = new Date(`${deadline}T00:00:00`);
+    const difference = deadlineDate - todayStart;
+
+    return Math.round(difference / (1000 * 60 * 60 * 24));
+  }
+
   // Names of the months used when displaying the calendar.
   const monthNames = [
     "January",
@@ -158,6 +183,13 @@ function Dashboard() {
     );
   };
 
+  // Get all tasks that have a deadline on a specific calendar day.
+  const getTasksForDay = (day) => {
+    const calendarDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    return allTasks.filter((task) => task.deadline === calendarDate);
+  };
+
   return (
     <Box className="dashboard-page">
       <DashboardNavbar />
@@ -233,7 +265,17 @@ function Dashboard() {
                   onClick={() => openDayDetails(day)}
                   disabled={!day}
                 >
-                  {day && <Typography className="day-number">{day}</Typography>}
+                  {day && (
+                    <>
+                      <Typography className="day-number">{day}</Typography>
+
+                      {getTasksForDay(day).map((task) => (
+                        <Typography key={task.id} className="calendar-task">
+                          {task.title}
+                        </Typography>
+                      ))}
+                    </>
+                  )}
                 </Button>
               ))}
             </Box>
@@ -272,7 +314,6 @@ function Dashboard() {
                   No pending tasks yet.
                 </Typography>
               ) : (
-                
                 <Box className="pending-task-list">
                   {pendingTasks.map((task) => (
                     <Box key={task.id} className="pending-task-item">
@@ -298,12 +339,64 @@ function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Approaching deadlines from Task Management. */}
-          <DashboardCard
-            title="Approaching Deadlines"
-            count={0}
-            message="No approaching deadlines yet."
-          />
+          {/* Tasks with a deadline within the next 5 days. */}
+          <Card className="overview-card" elevation={2}>
+            <CardContent>
+              <Typography variant="h6" className="overview-title">
+                Approaching Deadlines
+              </Typography>
+
+              <Typography variant="h4" className="overview-count">
+                {approachingDeadlines.length}
+              </Typography>
+
+              {approachingDeadlines.length === 0 ? (
+                <Typography className="empty-text">
+                  No approaching deadlines.
+                </Typography>
+              ) : (
+                <Box className="pending-task-list">
+                  {approachingDeadlines.map((task) => (
+                    <Box key={task.id} className="pending-task-item">
+                      {/* Task title and remaining days */}
+                      <Box className="approaching-task-header">
+                        <Typography className="pending-task-title">
+                          {task.title}
+                        </Typography>
+
+                        <Typography
+                          className={`days-left-badge ${
+                            getDaysLeft(task.deadline) <= 1
+                              ? "days-left-urgent"
+                              : getDaysLeft(task.deadline) <= 3
+                                ? "days-left-soon"
+                                : "days-left-normal"
+                          }`}
+                        >
+                          {getDaysLeft(task.deadline) === 0
+                            ? "Due today"
+                            : getDaysLeft(task.deadline) === 1
+                              ? "1 day left"
+                              : `${getDaysLeft(task.deadline)} days left`}
+                        </Typography>
+                      </Box>
+
+                      {/* List name and exact deadline */}
+                      <Box className="pending-task-meta">
+                        <Typography className="pending-task-list-name">
+                          List: {task.listName}
+                        </Typography>
+
+                        <Typography className="pending-task-deadline">
+                          Due {task.deadline}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </CardContent>
+          </Card>
         </Box>
       </Box>
 
@@ -335,9 +428,31 @@ function Dashboard() {
             Tasks
           </Typography>
 
-          <Typography className="day-dialog-text">
-            No tasks scheduled for this day.
-          </Typography>
+          {selectedDay && getTasksForDay(selectedDay).length > 0 ? (
+            <Box className="pending-task-list">
+              {getTasksForDay(selectedDay).map((task) => (
+                <Box key={task.id} className="pending-task-item">
+                  <Typography className="pending-task-title">
+                    {task.title}
+                  </Typography>
+
+                  <Box className="pending-task-meta">
+                    <Typography className="pending-task-list-name">
+                      List: {task.listName}
+                    </Typography>
+
+                    <Typography className="pending-task-deadline">
+                      Due {task.deadline}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          ) : (
+            <Typography className="day-dialog-text">
+              No tasks scheduled for this day.
+            </Typography>
+          )}
         </DialogContent>
 
         <DialogActions>

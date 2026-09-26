@@ -105,6 +105,8 @@
     cursor: pointer;
     box-sizing: border-box;
     text-transform: none;
+    flex-direction: column;
+    gap: 7px;
 }
 
 .calendar-day.MuiButton-root:hover {
@@ -250,4 +252,72 @@
 .pending-task-deadline {
     font-size: 12px;
     color: #667085;
+}
+
+
+/* Task title and days-left badge on the same row. */
+.approaching-task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-bottom: 10px;
+}
+
+
+/* Large badge showing how many days are left. */
+.days-left-badge {
+    padding: 7px 14px;
+
+    border-radius: 10px;
+
+    font-size: 16px !important;
+    font-weight: 700 !important;
+
+    white-space: nowrap;
+}
+
+
+/* Deadline is today or tomorrow. */
+.days-left-urgent {
+    background: #fde8e8;
+    color: #b42318;
+}
+
+
+/* Deadline is within 2–3 days. */
+.days-left-soon {
+    background: #fff1d6;
+    color: #9a5b00;
+}
+
+
+/* Deadline is within 4–5 days. */
+.days-left-normal {
+    background: #e8f0f8;
+    color: #365f85;
+}
+
+
+/* Task shown inside a calendar day. */
+.calendar-task {
+    width: 100%;
+    padding: 7px 9px;
+
+    background: #dfeaf5;
+    border-left: 4px solid #4f7398;
+    border-radius: 7px;
+
+    box-sizing: border-box;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #244563;
+
+    text-align: left;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
