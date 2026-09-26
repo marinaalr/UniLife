@@ -44,11 +44,10 @@ function App() {
                 />
 
                 <Route
-<<<<<<< HEAD
                     path="/events"
                     component={Events}
                 />
-=======
+                <Route
                     path="/profile"
                     component={Profile}
                 />
@@ -64,7 +63,6 @@ function App() {
                 />
 
 
->>>>>>> main
             </Switch>
         </BrowserRouter>
     );
