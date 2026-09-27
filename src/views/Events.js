@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, TextField, Toolbar, Typography, Box } from "@mui/material";
 import "./Events.css"
-import Navbar from './components/Navbar';
+import DashboardNavbar from './components/DashboardNavbar';
 
 function Events() {
     const [isOpen, setIsOpen] = useState(false);
 
     const [events, setEvents] = useState([]);
-    const [name, setName] = useState("");
-    const [location, setLocation] = useState("");
-    const [date, setDate] = useState("");
+    const [eventsLoaded, setEventsLoaded] = useState(false);
+
+    const [eventName, setName] = useState("");
+    const [eventLocation, setLocation] = useState("");
+    const [eventDate, setDate] = useState("");
 
     const createEvent = () => {
         const newEvent = {
             id: Date.now(),
-            name,
-            date,
-            location
+            eventName,
+            eventLocation,
+            eventDate
         };
 
         setEvents([...events, newEvent]);
@@ -24,10 +26,67 @@ function Events() {
         setName("");
         setDate("");
         setLocation("");
+
+        setIsOpen(false);
     };
+
+    useEffect(() => {
+        async function loadEvents() {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/events",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if(response.ok) {
+                    setEvents(data.events);
+                }
+
+                setEventsLoaded(true);
+            } catch {
+                console.log("Could not load events");
+            }
+        }
+
+        loadEvents();
+    }, []);
+
+    useEffect(() => {
+        async function saveEvents() {
+            const token = localStorage.getItem("token");
+
+            try {
+                await fetch(
+                    "http://localhost:5000/api/events",
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            events: events
+                        })
+                    }
+                );
+            } catch {
+                console.log("Could not save events");
+            }
+        }
+
+        saveEvents();
+    }, [events, eventsLoaded])
     return (
         <Box className="eventPage">
-            <Navbar />
+            <DashboardNavbar />
 
             <Toolbar className="event-toolbar">
 
@@ -70,7 +129,7 @@ function Events() {
                                 type="text"
                                 required
                                 margin="normal"
-                                value={name}
+                                value={eventName}
                                 onChange={(event) => setName(event.target.value)}
                             />
 
@@ -80,7 +139,7 @@ function Events() {
                                 type="text"
                                 required
                                 margin="normal"
-                                value={location}
+                                value={eventLocation}
                                 onChange={(event) => setLocation(event.target.value)}
                             />
 
@@ -89,7 +148,7 @@ function Events() {
                                 type="date"
                                 required
                                 margin="normal"
-                                value={date}
+                                value={eventDate}
                                 onChange={(event) => setDate(event.target.value)}
                             />
 
@@ -104,14 +163,15 @@ function Events() {
                     </div>
                 )}
             </Toolbar>
-            <div className="eventBox">
+            <Box className="eventBox">
+                onCreateEvent=(createEvent)
                 {events.map((event) => (
                     <div className="eventDisplay" key={event.id}>
-                        <h2 className="eventName">{event.name}</h2>
-                        <p className="info">{event.location} {event.date} </p>
+                        <h2 className="eventName">{event.eventName}</h2>
+                        <p className="info">{event.eventLocation} {event.eventDate} </p>
                     </div>
                 ))}
-            </div>
+            </Box>
         </Box>
     )
 }
