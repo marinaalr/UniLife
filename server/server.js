@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");  // Vi vill använda Mongoose för att prata med MongoDB
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
@@ -18,6 +19,16 @@ app.use(express.json());
 //Authentication routes
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
+
+//Connect to MongoDB
+mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log("Connected to MongoDB database:", mongoose.connection.name);
+    })
+    .catch((error) => {
+        console.log("MongoDB connection error:", error);
+    });
 
 //Start the server
 app.listen(PORT, () => {

@@ -48,7 +48,7 @@ function DashboardNavbar() {
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("profile");
-        history.push("/login");
+        history.push("/");
     };
 
     return (
