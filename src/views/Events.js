@@ -164,7 +164,6 @@ function Events() {
                 )}
             </Toolbar>
             <Box className="eventBox">
-                onCreateEvent=(createEvent)
                 {events.map((event) => (
                     <div className="eventDisplay" key={event.id}>
                         <h2 className="eventName">{event.eventName}</h2>
