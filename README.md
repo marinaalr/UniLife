@@ -146,6 +146,8 @@ The project is developed using the following technologies:
 - ExpressJS
 - React Router
 - ESLint
+- MongoDB
+- Mongoose
 
 
 ## Project Structure
@@ -197,12 +199,22 @@ npm install
 
 ### Running the Application
 
-Start the development server by running:
+Make sure MongoDB is installed and running on your computer.
+
+Start the backend server in one terminal:
+
+```bash
+node server/server.js
+```
+
+Open a second terminal and start the React application:
+
 ```bash
 npm start
 ```
 
 The application will then be available in the browser at:
+
 ```bash
 http://localhost:3000
 ```
