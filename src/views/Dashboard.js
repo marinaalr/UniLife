@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardCard from "../components/DashboardCard";
+
+import { loadTasks } from "../controllers/taskController";
+
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -33,32 +36,19 @@ function Dashboard() {
   const [taskLists, setTaskLists] = useState([]);
 
   // Load the logged in user's task lists from the server.
-  useEffect(() => {
-    async function loadTasks() {
-      const token = localStorage.getItem("token");
+useEffect(() => {
+  async function loadUserTasks() {
+    const result = await loadTasks();
 
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/tasks",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setTaskLists(data.lists);
-        }
-      } catch {
-        console.log("Could not load tasks.");
-      }
+    if (result.success) {
+      setTaskLists(result.data.lists);
+    } else {
+      console.log("Could not load tasks.");
     }
+  }
 
-    loadTasks();
-  }, []);
+  loadUserTasks();
+}, []);
 
   // Collect all tasks from all task lists.
   const allTasks = taskLists.flatMap((list) =>

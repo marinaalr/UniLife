@@ -11,6 +11,8 @@ import {
 
 import DashboardNavbar from "./components/DashboardNavbar";
 
+import updatePassword from "../controllers/settingsController";
+
 import "./Settings.css";
 
 function Settings() {
@@ -22,55 +24,32 @@ function Settings() {
     const [success, setSuccess] = useState("");
 
     // Handle password form
-    const handlePasswordChange = async (event) => {
-        event.preventDefault();
+const handlePasswordChange = async (event) => {
+    event.preventDefault();
 
-        if (newPassword !== confirmPassword) {
-            setError("New passwords do not match.");
-            return;
-        }
-
-        setError("");
-        setSuccess("");
-
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            setError("You are not logged in.");
-            return;
-        }
-
-        try {
-        const response = await fetch(
-            "http://localhost:5000/api/auth/password",
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    currentPassword,
-                    newPassword
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            setError(data.message);
-            return;
-        }
-
-        setSuccess(data.message);
-
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-    } catch {
-        setError("Could not connect to the server.");
+    if (newPassword !== confirmPassword) {
+        setError("New passwords do not match.");
+        return;
     }
+
+    setError("");
+    setSuccess("");
+
+    // Ask the controller to handle the password change.
+    const result = await updatePassword(
+        currentPassword,
+        newPassword,
+    );
+
+    if (!result.success) {
+        setError(result.message);
+        return;
+    }
+
+    setSuccess(result.message);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
 };
 
     return (

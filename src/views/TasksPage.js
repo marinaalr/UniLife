@@ -13,6 +13,11 @@ import TaskSidebar from './components/tasks/TaskSidebar';
 import TaskList from './components/tasks/TaskList';
 import TaskDialogs from './components/tasks/TaskDialogs';
 
+import {
+  loadTasks,
+  saveUserTasks
+} from '../controllers/taskController';
+
 import './TasksPage.css';
 
 
@@ -67,37 +72,25 @@ function TasksPage() {
 // Load the logged in user's tasks
 // First UseEffect bring the saved tasks
 // Second UseEffect is used when lists changes 
+// Load the logged in user's tasks.
 useEffect(() => {
-  async function loadTasks() {
-    const token = localStorage.getItem("token");
+  async function loadUserTasks() {
+    const result = await loadTasks();
 
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/tasks",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+    if (result.success) {
+      setLists(result.data.lists);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setLists(data.lists);
-
-        if (data.lists.length > 0) {
-          setSelectedListId(data.lists[0].id);
-        }
-
-        setTasksLoaded(true);
+      if (result.data.lists.length > 0) {
+        setSelectedListId(result.data.lists[0].id);
       }
-    } catch {
+
+      setTasksLoaded(true);
+    } else {
       console.log("Could not load tasks.");
     }
   }
 
-  loadTasks();
+  loadUserTasks();
 }, []);
 
 
@@ -107,31 +100,17 @@ useEffect(() => {
     return;
   }
 
-  async function saveTasks() {
-    const token = localStorage.getItem("token");
+  async function saveUserTaskLists() {
+    const result = await saveUserTasks(lists);
 
-    try {
-      await fetch(
-        "http://localhost:5000/api/tasks",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            lists: lists
-          })
-        }
-      );
-    } catch {
+    if (!result.success) {
       console.log("Could not save tasks.");
     }
   }
 
-  saveTasks();
-}, [lists, tasksLoaded]);
+  saveUserTaskLists();
 
+}, [lists, tasksLoaded]);
 
   // Get today's date
   const today = new Date().toLocaleDateString('en-CA');

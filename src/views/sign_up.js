@@ -7,6 +7,9 @@ import {
     TextField,
     Typography
 } from "@mui/material";
+
+import signupController from "../controllers/signupController";
+
 import "./sign_up.css";
 
 function Signup() {
@@ -17,45 +20,33 @@ function Signup() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    
-    const handleSignup = async (event) => {
-        event.preventDefault();
-        setError("");
-        setSuccess("");
 
-        try {
-            const response = await fetch(
-                "http://localhost:5000/api/auth/register",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name,
-                        username,
-                        email,
-                        password
-                    })
-                }
-            );
+    // Handle user registration.
+const handleSignup = async (event) => {
+    event.preventDefault();
 
-            const data = await response.json();
+    setError("");
+    setSuccess("");
 
-            if (!response.ok) {
-                setError(data.message);
-                return;
-            }
+    // Ask the controller to handle registration.
+    const result = await signupController(
+        name,
+        username,
+        email,
+        password,
+    );
 
-            setSuccess("Account created successfully.");
+    if (!result.success) {
+        setError(result.message);
+        return;
+    }
 
-            setTimeout(() => {
-                history.push("/login");
-            }, 1000);
-        } catch {
-            setError("Could not connect to the server.");
-        }
-    };
+    setSuccess(result.message);
+
+    setTimeout(() => {
+        history.push("/login");
+    }, 1000);
+};
 
     return (
         <Box 

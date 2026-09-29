@@ -17,6 +17,13 @@ import {
 } from "@mui/icons-material";
 import { Link, useHistory } from "react-router-dom";
 
+
+import {
+  loadNotifications,
+  readNotification
+} from "../../controllers/notificationController";
+
+
 function DashboardNavbar() {
   // Store the element that opens the notifications menu.
   const [notificationAnchor, setNotificationAnchor] = useState(null);
@@ -27,29 +34,13 @@ function DashboardNavbar() {
   // Store the element that opens the profile menu.
   const [profileAnchor, setProfileAnchor] = useState(null);
 
-  // Get notifications from the server.
+  // Get notifications from the controller.
   const fetchNotifications = useCallback(async () => {
-    try {
-      const token = localStorage.getItem("token");
+      const result = await loadNotifications();
 
-      const response = await fetch(
-        "http://localhost:5000/api/notifications",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        return;
+      if (result.success) {
+          setNotifications(result.data);
       }
-
-      const data = await response.json();
-      setNotifications(data);
-    } catch {
-      // Ignore notification loading errors.
-    }
   }, []);
 
   // Load notifications when the navbar is opened.
@@ -76,35 +67,21 @@ useEffect(() => {
     setNotificationAnchor(null);
   };
 
-  // Mark a notification as read.
+  // Mark a notification as read through the controller.
   const markNotificationAsRead = async (notificationId) => {
-    try {
-      const token = localStorage.getItem("token");
+      const result = await readNotification(notificationId);
 
-      const response = await fetch(
-        `http://localhost:5000/api/notifications/${notificationId}/read`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
+      if (!result.success) {
         return;
       }
 
       setNotifications((currentNotifications) =>
-        currentNotifications.map((notification) =>
+         currentNotifications.map((notification) =>
           notification._id === notificationId
             ? { ...notification, read: true }
-            : notification,
-        ),
-      );
-    } catch {
-      // Ignore notification update errors.
-    }
+              : notification,
+          ),
+        );
   };
 
   // Open the profile menu.
