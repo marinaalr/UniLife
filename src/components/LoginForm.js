@@ -1,58 +1,48 @@
 import React, { useState } from "react";
+
 import { useHistory } from "react-router-dom";
 
 import {
     Box,
     Button,
     TextField,
-    Typography
+    Typography,
 } from "@mui/material";
+
+import loginController from "../controllers/loginController";
 
 function LoginForm() {
     const history = useHistory();
 
+    // Store the username/email entered by the user.
     const [identifier, setIdentifier] = useState("");
+
+    // Store the password entered by the user.
     const [password, setPassword] = useState("");
+
+    // Store login error messages.
     const [error, setError] = useState("");
 
     // Handle login.
     const handleLogin = async (event) => {
         event.preventDefault();
+
         setError("");
 
-        try {
-            const response = await fetch(
-                "http://localhost:5000/api/auth/login",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        identifier,
-                        password
-                    })
-                }
-            );
+        // Ask the login controller to handle the login.
+        const result = await loginController(
+            identifier,
+            password,
+        );
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                setError(data.message);
-                return;
-            }
-
-            localStorage.setItem("token", data.token);
-
-            localStorage.setItem(
-                "profile",
-                JSON.stringify(data.user)
-            );
-
-            history.push("/dashboard");
-        } catch {
-            setError("Could not connect to the server.");
+        // Show an error if the login was unsuccessful.
+        if (!result.success) {
+            setError(result.message);
+            return;
         }
+
+        // Go to the dashboard after a successful login.
+        history.push("/dashboard");
     };
 
     return (

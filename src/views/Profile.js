@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DashboardNavbar from "./components/DashboardNavbar";
 import "./Profile.css";
+import saveProfile from "../controllers/profileController";
 
 function Profile() {
     const savedProfile = JSON.parse(
@@ -64,18 +65,12 @@ function Profile() {
         reader.readAsDataURL(file);
     };
 
-    const handleSave = async (event) => {
+// Save the user's profile through the controller.
+const handleSave = async (event) => {
     event.preventDefault();
 
     setError("");
     setSaved(false);
-
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        setError("You are not logged in.");
-        return;
-    }
 
     const profileData = {
         name,
@@ -85,42 +80,31 @@ function Profile() {
         university,
         program,
         yearOfStudy,
-        bio
+        bio,
     };
 
-    try {
-        const response = await fetch(
-            "http://localhost:5000/api/auth/profile",
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(profileData)
-            }
-        );
+    const result = await saveProfile(profileData);
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            setError(data.message);
-            return;
-        }
-
-        localStorage.setItem(
-            "profile",
-            JSON.stringify(data.user)
-        );
-
-        setName(data.user.name);
-        setUsername(data.user.username);
-        setEmail(data.user.email);
-
-        setSaved(true);
-    } catch {
-        setError("Could not connect to the server.");
+    if (!result.success) {
+        setError(result.message);
+        return;
     }
+
+    localStorage.setItem(
+        "profile",
+        JSON.stringify(result.user),
+    );
+
+    setName(result.user.name);
+    setUsername(result.user.username);
+    setEmail(result.user.email);
+    setProfilePicture(result.user.profilePicture || "");
+    setUniversity(result.user.university || "");
+    setProgram(result.user.program || "");
+    setYearOfStudy(result.user.yearOfStudy || "");
+    setBio(result.user.bio || "");
+
+    setSaved(true);
 };
 
     return (
