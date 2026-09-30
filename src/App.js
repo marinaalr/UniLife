@@ -6,6 +6,7 @@ import HomePage from "./views/HomePage";
 import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
 import Signup from "./views/sign_up";
+import Events from "./views/Events";
 import Profile from "./views/Profile";
 import Settings from "./views/Settings";
 import TasksPage from "./views/TasksPage";
@@ -42,6 +43,10 @@ function App() {
                     component={Signup}
                 />
 
+                <Route
+                    path="/events"
+                    component={Events}
+                />
                 <Route
                     path="/profile"
                     component={Profile}

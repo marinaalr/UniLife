@@ -9,6 +9,7 @@ process.env.JWT_SECRET =
 
 const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+const eventRoutes = require("./routes/eventRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(express.json());
 //Authentication routes
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/events", eventRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 //Connect to MongoDB
