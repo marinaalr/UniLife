@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardCard from "../components/DashboardCard";
+
+import { loadTasks } from "../controllers/taskController";
+
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -33,29 +36,19 @@ function Dashboard() {
   const [taskLists, setTaskLists] = useState([]);
 
   // Load the logged in user's task lists from the server.
-  useEffect(() => {
-    async function loadTasks() {
-      const token = localStorage.getItem("token");
+useEffect(() => {
+  async function loadUserTasks() {
+    const result = await loadTasks();
 
-      try {
-        const response = await fetch("http://localhost:5000/api/tasks", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setTaskLists(data.lists);
-        }
-      } catch {
-        console.log("Could not load tasks.");
-      }
+    if (result.success) {
+      setTaskLists(result.data.lists);
+    } else {
+      console.log("Could not load tasks.");
     }
+  }
 
-    loadTasks();
-  }, []);
+  loadUserTasks();
+}, []);
 
   // Collect all tasks from all task lists.
   const allTasks = taskLists.flatMap((list) =>
@@ -75,7 +68,7 @@ function Dashboard() {
       return a.deadline.localeCompare(b.deadline);
     });
 
-  // Find pending tasks with a deadline within the next 7 days.
+  // Find pending tasks with a deadline within the next 5 days.
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
@@ -241,16 +234,16 @@ function Dashboard() {
 
             {/* Weekday headings. */}
             <Box className="calendar-weekdays">
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-                <Typography key={day} className="calendar-weekday">
-                  {day}
-                </Typography>
-              ))}
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+                (day) => (
+                  <Typography key={day} className="calendar-weekday">
+                    {day}
+                  </Typography>
+                ),
+              )}
             </Box>
 
-            {/* Empty calendar.
-                            Events and tasks will later be displayed here
-                            using data from the other project features. */}
+            {/* Calendar days. */}
             <Box className="calendar-grid">
               {calendarDays.map((day, index) => (
                 <Button
@@ -358,7 +351,7 @@ function Dashboard() {
                 <Box className="pending-task-list">
                   {approachingDeadlines.map((task) => (
                     <Box key={task.id} className="pending-task-item">
-                      {/* Task title and remaining days */}
+                      {/* Task title and remaining days. */}
                       <Box className="approaching-task-header">
                         <Typography className="pending-task-title">
                           {task.title}
@@ -381,7 +374,7 @@ function Dashboard() {
                         </Typography>
                       </Box>
 
-                      {/* List name and exact deadline */}
+                      {/* List name and exact deadline. */}
                       <Box className="pending-task-meta">
                         <Typography className="pending-task-list-name">
                           List: {task.listName}

@@ -1,176 +1,345 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-    AppBar,
-    Toolbar,
-    Typography,
-    Button,
-    Box,
-    IconButton,
-    Menu,
-    MenuItem,
-    Badge
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Badge,
+  Divider,
 } from "@mui/material";
 import {
-    Notifications as NotificationsIcon,
-    AccountCircle as AccountCircleIcon
+  Notifications as NotificationsIcon,
+  AccountCircle as AccountCircleIcon,
 } from "@mui/icons-material";
 import { Link, useHistory } from "react-router-dom";
 
+
+import {
+  loadNotifications,
+  readNotification
+} from "../../controllers/notificationController";
+
+
 function DashboardNavbar() {
-    // Store the element that opens the notifications menu.
-    const [notificationAnchor, setNotificationAnchor] = useState(null);
+  // Store the element that opens the notifications menu.
+  const [notificationAnchor, setNotificationAnchor] = useState(null);
 
-    // Store the element that opens the profile menu.
-    const [profileAnchor, setProfileAnchor] = useState(null);
+  // Store the user's notifications.
+  const [notifications, setNotifications] = useState([]);
 
-    // Open the notifications menu.
-    const openNotifications = (event) => {
-        setNotificationAnchor(event.currentTarget);
-    };
+  // Store the element that opens the profile menu.
+  const [profileAnchor, setProfileAnchor] = useState(null);
 
-    // Close the notifications menu.
-    const closeNotifications = () => {
-        setNotificationAnchor(null);
-    };
+  // Get notifications from the controller.
+  const fetchNotifications = useCallback(async () => {
+      const result = await loadNotifications();
 
-    // Open the profile menu.
-    const openProfile = (event) => {
-        setProfileAnchor(event.currentTarget);
-    };
+      if (result.success) {
+          setNotifications(result.data);
+      }
+  }, []);
 
-    // Close the profile menu.
-    const closeProfile = () => {
-        setProfileAnchor(null);
-    };
+  // Load notifications when the navbar is opened.
+useEffect(() => {
+  fetchNotifications();
 
-    const history = useHistory();
+  const interval = setInterval(() => {
+    fetchNotifications();
+  }, 3000);
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("profile");
-        history.push("/");
-    };
+  return () => {
+    clearInterval(interval);
+  };
+}, [fetchNotifications]);
 
-    return (
-        <AppBar position="static">
-            <Toolbar>
+  // Open the notifications menu and refresh notifications.
+  const openNotifications = async (event) => {
+    setNotificationAnchor(event.currentTarget);
+    await fetchNotifications();
+  };
 
-                {/* UniLife logo/name */}
+  // Close the notifications menu.
+  const closeNotifications = () => {
+    setNotificationAnchor(null);
+  };
+
+  // Mark a notification as read through the controller.
+  const markNotificationAsRead = async (notificationId) => {
+      const result = await readNotification(notificationId);
+
+      if (!result.success) {
+        return;
+      }
+
+      setNotifications((currentNotifications) =>
+         currentNotifications.map((notification) =>
+          notification._id === notificationId
+            ? { ...notification, read: true }
+              : notification,
+          ),
+        );
+  };
+
+  // Open the profile menu.
+  const openProfile = (event) => {
+    setProfileAnchor(event.currentTarget);
+  };
+
+  // Close the profile menu.
+  const closeProfile = () => {
+    setProfileAnchor(null);
+  };
+
+  const history = useHistory();
+
+  // Log the user out.
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("profile");
+    history.push("/");
+  };
+
+  // Count unread notifications.
+  const unreadNotifications = notifications.filter(
+    (notification) => !notification.read,
+  ).length;
+
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        {/* UniLife logo/name. */}
+        <Typography
+          variant="h6"
+          sx={{
+            marginRight: 4,
+            fontFamily: 'Georgia, "Times New Roman", serif',
+          }}
+        >
+          UniLife
+        </Typography>
+
+        {/* Navigation links. */}
+        <Button color="inherit" component={Link} to="/dashboard">
+          Dashboard
+        </Button>
+
+        <Button color="inherit" component={Link} to="/events">
+          Events
+        </Button>
+
+        <Button color="inherit" component={Link} to="/tasks">
+          Tasks
+        </Button>
+
+        {/* Notifications and profile. */}
+        <Box
+          sx={{
+            marginLeft: "auto",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {/* Notifications button. */}
+          <IconButton
+            color="inherit"
+            onClick={openNotifications}
+            aria-label="Notifications"
+          >
+            <Badge badgeContent={unreadNotifications} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+
+          {/* Notifications menu. */}
+          <Menu
+            anchorEl={notificationAnchor}
+            open={Boolean(notificationAnchor)}
+            onClose={closeNotifications}
+            PaperProps={{
+              sx: {
+                width: 360,
+                maxWidth: "calc(100vw - 32px)",
+                marginTop: 1,
+                borderRadius: 2,
+                boxShadow: "0 8px 25px rgba(0, 0, 0, 0.15)",
+                overflow: "hidden",
+              },
+            }}
+          >
+            {/* Notifications header. */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "14px 18px",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: 17,
+                }}
+              >
+                Notifications
+              </Typography>
+
+              {unreadNotifications > 0 && (
                 <Typography
-                    variant="h6"
-                    sx={{
-                        marginRight: 4,
-                        fontFamily: 'Georgia, "Times New Roman", serif'
-                    }}
+                  sx={{
+                    fontSize: 13,
+                    color: "text.secondary",
+                  }}
                 >
-                    UniLife
+                  {unreadNotifications} unread
                 </Typography>
+              )}
+            </Box>
 
-                {/* Navigation links for the logged-in area */}
-                <Button
-                    color="inherit"
-                    component={Link}
-                    to="/dashboard"
+            <Divider />
+
+            {notifications.length === 0 ? (
+              <Box
+                sx={{
+                  padding: "28px 20px",
+                  textAlign: "center",
+                }}
+              >
+                <NotificationsIcon
+                  sx={{
+                    fontSize: 32,
+                    color: "text.disabled",
+                    marginBottom: 1,
+                  }}
+                />
+
+                <Typography
+                  sx={{
+                    fontSize: 14,
+                    color: "text.secondary",
+                  }}
                 >
-                    Dashboard
-                </Button>
+                  No new notifications
+                </Typography>
+              </Box>
+            ) : (
+              notifications.map((notification) => (
+                <MenuItem
+                  key={notification._id}
+                  onClick={() => {
+                    markNotificationAsRead(notification._id);
+                    closeNotifications();
+                  }}
+                  sx={{
+                    padding: "14px 18px",
+                    whiteSpace: "normal",
+                    alignItems: "flex-start",
+                    backgroundColor: notification.read
+                      ? "transparent"
+                      : "rgba(25, 118, 210, 0.06)",
 
-                <Button
-                    color="inherit"
-                    component={Link}
-                    to="/events"
+                    "&:hover": {
+                      backgroundColor: notification.read
+                        ? "rgba(0, 0, 0, 0.04)"
+                        : "rgba(25, 118, 210, 0.11)",
+                    },
+                  }}
                 >
-                    Events
-                </Button>
-
-                <Button
-                    color="inherit"
-                    component={Link}
-                    to="/tasks"
-                >
-                    Tasks
-                </Button>
-
-                {/* Notifications and profile */}
-                <Box
+                  {/* Blue dot for unread notifications. */}
+                  <Box
                     sx={{
-                        marginLeft: "auto",
-                        display: "flex",
-                        alignItems: "center"
+                      width: 8,
+                      height: 8,
+                      minWidth: 8,
+                      borderRadius: "50%",
+                      backgroundColor: notification.read
+                        ? "transparent"
+                        : "#1976d2",
+                      marginTop: "7px",
+                      marginRight: 1.5,
                     }}
-                >
-                    {/* Notifications button */}
-                    <IconButton
-                        color="inherit"
-                        onClick={openNotifications}
-                        aria-label="Notifications"
-                    >
-                        <Badge
-                            badgeContent={0}
-                            color="error"
-                        >
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
+                  />
 
-                    <Menu
-                        anchorEl={notificationAnchor}
-                        open={Boolean(notificationAnchor)}
-                        onClose={closeNotifications}
-                    >
-                        <MenuItem onClick={closeNotifications}>
-                            No new notifications
-                        </MenuItem>
-                    </Menu>
-
-                    {/* Profile button */}
-                    <IconButton
-                        color="inherit"
-                        onClick={openProfile}
-                        aria-label="Profile"
-                    >
-                        <AccountCircleIcon />
-                    </IconButton>
-
+                  {/* Notification content. */}
+                  <Box>
                     <Typography
-                        component="span"
-                        sx={{
-                            marginLeft: 1,
-                            fontSize: 15
-                        }}
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: notification.read ? 400 : 600,
+                        lineHeight: 1.5,
+                      }}
                     >
-                        Profile
+                      {notification.message}
                     </Typography>
 
-                    <Menu
-                        anchorEl={profileAnchor}
-                        open={Boolean(profileAnchor)}
-                        onClose={closeProfile}
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        color: "text.secondary",
+                        marginTop: 0.5,
+                      }}
                     >
-                        <MenuItem 
-                            component={Link}
-                            to="/profile"
-                            onClick={closeProfile}
-                        >
-                            Profile
-                        </MenuItem>
+                      Task deadline
+                    </Typography>
+                  </Box>
+                </MenuItem>
+              ))
+            )}
+          </Menu>
 
-                        <MenuItem
-                            component={Link}
-                            to="/settings" 
-                            onClick={closeProfile}
-                        >
-                            Settings
-                        </MenuItem>
+          {/* Profile button. */}
+          <IconButton
+            color="inherit"
+            onClick={openProfile}
+            aria-label="Profile"
+          >
+            <AccountCircleIcon />
+          </IconButton>
 
-                        <MenuItem onClick={handleLogout}>
-                            Log out
-                        </MenuItem>
-                    </Menu>
-                </Box>
-            </Toolbar>
-        </AppBar>
-    );
+          <Typography
+            component="span"
+            sx={{
+              marginLeft: 1,
+              fontSize: 15,
+            }}
+          >
+            Profile
+          </Typography>
+
+          {/* Profile menu. */}
+          <Menu
+            anchorEl={profileAnchor}
+            open={Boolean(profileAnchor)}
+            onClose={closeProfile}
+          >
+            <MenuItem
+              component={Link}
+              to="/profile"
+              onClick={closeProfile}
+            >
+              Profile
+            </MenuItem>
+
+            <MenuItem
+              component={Link}
+              to="/settings"
+              onClick={closeProfile}
+            >
+              Settings
+            </MenuItem>
+
+            <MenuItem onClick={handleLogout}>
+              Log out
+            </MenuItem>
+          </Menu>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default DashboardNavbar;
