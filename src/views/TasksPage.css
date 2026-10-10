@@ -1,257 +1,290 @@
-/* Main page */
+/* Main task page */
 .task-page {
-  min-height: 100vh;
-  padding: 35px 45px;
-  background-color: #ffffff;
+  min-height: calc(100vh - 72px);
+  padding: 50px 60px 70px;
+
+  background: linear-gradient(
+  135deg,
+  #e6f0ff 0%,
+  #edf2ff 55%,
+  #f3efff 100%
+);
 }
 
 
-/* Top section with title and button */
+/* Page heading */
 .task-header {
+  max-width: 1050px;
+  margin: 0 auto 32px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
 }
 
 
-/* Main page title */
+/* Main title */
 .task-page-title {
-  font-size: 58px !important;
-  font-weight: 400 !important;
-  color: #1f2f4a;
-  line-height: 1.1 !important;
+  color: #172554;
+
+  font-size: 46px !important;
+  font-weight: 700 !important;
+  letter-spacing: -1px !important;
 }
 
 
-/* Text under the title */
+/* Subtitle */
 .task-page-subtitle {
-  margin-top: 5px !important;
-  color: #737b91;
-  font-size: 18px !important;
+  margin-top: 6px !important;
+
+  color: #64748b;
+
+  font-size: 17px !important;
 }
 
 
-/* Large background area for tasks */
+/* New task button */
+.task-header .MuiButton-contained {
+  padding: 10px 20px;
+
+  border-radius: 10px;
+
+  background-color: #3971d6;
+
+  font-weight: 600;
+  text-transform: none;
+
+  box-shadow: 0 4px 10px rgba(57, 113, 214, 0.22);
+}
+
+
+.task-header .MuiButton-contained:hover {
+  background-color: #2f63c2;
+  box-shadow: 0 5px 14px rgba(57, 113, 214, 0.28);
+}
+
+
+/* Area containing the tasks */
 .task-board {
-  min-height: 500px;
-  padding: 30px;
+  max-width: 1050px;
+  min-height: 420px;
 
-  background-color: #f7f6f8;
+  margin: 0 auto;
+  padding: 0;
 
-  border: 1px solid #e4e1e5;
-  border-radius: 15px;
+  background: transparent;
+
+  border: none;
 }
 
 
-/* Form for creating a task */
+/* New task form */
 .new-task-card {
-  max-width: 500px;
+  max-width: 720px;
+
+  margin-bottom: 28px;
+  padding: 28px 32px;
 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 
-  padding: 30px;
+  background-color: #ffffff;
 
-  background-color: white;
+  border: 1px solid #e2e7f2;
+  border-left: 4px solid #6f86e8;
+  border-radius: 14px;
 
-  border: 1px solid #dddddd;
-  border-radius: 15px;
+  box-shadow: 0 5px 18px rgba(23, 37, 84, 0.06);
 }
 
+/* Title inside the task form */
+.new-task-card .MuiTypography-h5 {
+  color: #172554;
 
-/* Label above deadline */
-.input-label {
-  margin-bottom: 8px !important;
+  font-size: 22px !important;
   font-weight: 600 !important;
 }
 
 
-/* Buttons at the bottom of the form */
+/* Deadline label */
+.input-label {
+  margin-bottom: 8px !important;
+
+  color: #334155;
+
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+
+/* Form buttons */
 .task-form-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+
+  margin-top: 4px;
 }
 
 
-/* One created task */
+.task-form-buttons .MuiButton-root {
+  border-radius: 9px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+
+/* One task card */
 .task-card {
-  padding: 20px;
-  margin-bottom: 15px;
+  min-height: 88px;
 
-  background-color: white;
+  margin-bottom: 14px;
+  padding: 18px 20px;
 
-  border: 1px solid #dddddd;
-  border-radius: 12px;
-}
-
-
-/* Task description */
-.task-description {
-  margin-top: 8px !important;
-  color: #555555;
-}
-
-
-/* Task deadline */
-.task-deadline {
-  margin-top: 12px !important;
-  color: #737b91;
-}
-
-
-/* Message shown when there are no tasks */
-.no-tasks {
-  color: #737b91;
-}
-
-/* Put checkbox, task information and buttons on the same row */
-.task-card {
   display: flex;
   align-items: center;
-}
+  gap: 8px;
 
+  background-color: #ffffff;
 
-/* Task text */
-.task-content {
-  flex: 1;
-}
-
-
-/* Make completed task text gray */
-.completed-task .task-content {
-  color: #9a9a9a;
-}
-
-
-/* Only cross out the task title */
-.completed-task .task-content h6 {
-  text-decoration: line-through;
-}
-
-/* Make all text gray when task is completed */
-.completed-task .task-content,
-.completed-task .task-description,
-.completed-task .task-deadline {
-  color: #9a9a9a !important;
-}
-
-
-/* Only cross out the task title */
-.completed-task .task-content h6 {
-  text-decoration: line-through;
-}
-
-/* Smaller task title */
-.task-card h6 {
-  font-size: 17px;
-}
-
-
-/* Smaller description */
-.task-description {
-  font-size: 14px !important;
-}
-
-
-/* Smaller deadline */
-.task-deadline {
-  font-size: 13px !important;
-}
-
-/* Give the task area a softer look */
-.task-board {
-  background: #f8f9fc;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-}
-
-/* Make each task look like a clean card */
-.task-card {
-  background: white;
-  border: 1px solid #e7e9ee;
+  border: 1px solid #e5eaf3;
   border-radius: 14px;
-  padding: 18px 20px;
-  margin-bottom: 14px;
+  border-left: 4px solid #6f86e8;
 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(23, 37, 84, 0.04);
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
-/* Small hover effect */
+
+/* Task card hover */
 .task-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+  transform: translateY(-1px);
+
+  border-color: #d5deee;
+
+  box-shadow: 0 7px 18px rgba(23, 37, 84, 0.07);
 }
 
-/* More space between task information and buttons */
+
+/* Checkbox */
+.task-card .MuiCheckbox-root {
+  color: #94a3b8;
+}
+
+
+.task-card .MuiCheckbox-root.Mui-checked {
+  color: #3971d6;
+}
+
+
+/* Task information */
 .task-content {
+  flex: 1;
+
   padding-left: 4px;
 }
 
-/* Make the deadline a little clearer */
+
+/* Task title */
+.task-card h6 {
+  color: #172554;
+
+  font-size: 17px;
+  font-weight: 600;
+}
+
+
+/* Description */
+.task-description {
+  margin-top: 3px !important;
+
+  color: #7a86a0;
+
+  font-size: 13px !important;
+}
+
+
+/* Deadline */
 .task-deadline {
-  margin-top: 10px !important;
+  margin-top: 7px !important;
+
+  color: #8490a6;
+
+  font-size: 13px !important;
   font-weight: 500 !important;
 }
 
-/* Small buttons for edit and delete */
+
+/* Edit and delete buttons */
 .task-action-button {
   width: 38px;
   height: 38px;
   min-width: 38px !important;
 
-  margin-left: 6px !important;
-
   border-radius: 10px !important;
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease !important;
 }
 
 
 /* Edit button */
 .edit-task-button {
-  color: #496a9f !important;
+  color: #3971d6 !important;
 }
 
+
 .edit-task-button:hover {
-  background-color: #eef3fb !important;
-  transform: scale(1.05);
+  background-color: #eef3ff !important;
 }
 
 
 /* Delete button */
 .delete-task-button {
-  color: #d64545 !important;
+  color: #d84c4c !important;
 }
+
 
 .delete-task-button:hover {
-  background-color: #fdecec !important;
-  transform: scale(1.05);
+  background-color: #fff0f0 !important;
 }
 
 
-/* Make the icons slightly smaller */
+/* Slightly smaller icons */
 .task-action-button svg {
   font-size: 20px;
 }
 
-/* Make the task form look like a proper panel */
-.new-task-card {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e4e6eb;
-}
 
-/* Make completed tasks slightly softer */
+/* Completed task */
 .completed-task {
-  background: #fafafa;
-  opacity: 0.75;
+  background-color: #fafbfc;
+
+  opacity: 0.72;
 }
 
+
+.completed-task .task-content,
+.completed-task .task-description,
+.completed-task .task-deadline {
+  color: #94a3b8 !important;
+}
+
+
+.completed-task .task-content h6 {
+  color: #94a3b8 !important;
+  text-decoration: line-through;
+}
+
+
+/* Empty state */
+.no-tasks {
+  padding: 50px 20px;
+
+  color: #8490a6;
+
+  text-align: center;
+  font-size: 16px !important;
+}

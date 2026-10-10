@@ -15,8 +15,9 @@ import {
   Notifications as NotificationsIcon,
   AccountCircle as AccountCircleIcon,
 } from "@mui/icons-material";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
+import "./DashboardNavbar.css";
 
 import {
   loadNotifications,
@@ -36,25 +37,25 @@ function DashboardNavbar() {
 
   // Get notifications from the controller.
   const fetchNotifications = useCallback(async () => {
-      const result = await loadNotifications();
+    const result = await loadNotifications();
 
-      if (result.success) {
-          setNotifications(result.data);
-      }
+    if (result.success) {
+      setNotifications(result.data);
+    }
   }, []);
 
   // Load notifications when the navbar is opened.
-useEffect(() => {
-  fetchNotifications();
-
-  const interval = setInterval(() => {
+  useEffect(() => {
     fetchNotifications();
-  }, 3000);
 
-  return () => {
-    clearInterval(interval);
-  };
-}, [fetchNotifications]);
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [fetchNotifications]);
 
   // Open the notifications menu and refresh notifications.
   const openNotifications = async (event) => {
@@ -69,19 +70,19 @@ useEffect(() => {
 
   // Mark a notification as read through the controller.
   const markNotificationAsRead = async (notificationId) => {
-      const result = await readNotification(notificationId);
+    const result = await readNotification(notificationId);
 
-      if (!result.success) {
-        return;
-      }
+    if (!result.success) {
+      return;
+    }
 
-      setNotifications((currentNotifications) =>
-         currentNotifications.map((notification) =>
-          notification._id === notificationId
-            ? { ...notification, read: true }
-              : notification,
-          ),
-        );
+    setNotifications((currentNotifications) =>
+      currentNotifications.map((notification) =>
+        notification._id === notificationId
+          ? { ...notification, read: true }
+          : notification,
+      ),
+    );
   };
 
   // Open the profile menu.
@@ -95,6 +96,7 @@ useEffect(() => {
   };
 
   const history = useHistory();
+  const location = useLocation();
 
   // Log the user out.
   const handleLogout = () => {
@@ -109,31 +111,107 @@ useEffect(() => {
   ).length;
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{
+        backgroundColor: "#ffffff",
+        color: "#172554",
+        borderBottom: "1px solid #e5e7eb",
+      }}
+    >
       <Toolbar>
-        {/* UniLife logo/name. */}
+
+        {/* UniLife logo/name */}
         <Typography
           variant="h6"
           sx={{
+            fontWeight: 700,
+            fontSize: "1.5rem",
+            letterSpacing: "-0.5px",
             marginRight: 4,
-            fontFamily: 'Georgia, "Times New Roman", serif',
           }}
         >
           UniLife
         </Typography>
 
-        {/* Navigation links. */}
-        <Button color="inherit" component={Link} to="/dashboard">
-          Dashboard
-        </Button>
+        {/* Navigation links */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Button
+            component={Link}
+            to="/dashboard"
+            disableRipple
+            sx={{
+              color: location.pathname === "/dashboard" ? "#3971d6" : "#334155",
+              backgroundColor:
+                location.pathname === "/dashboard" ? "#eef3ff" : "transparent",
+              borderRadius: "8px",
+              padding: "8px 14px",
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "15px",
 
-        <Button color="inherit" component={Link} to="/events">
-          Events
-        </Button>
+              "&:hover": {
+                backgroundColor: "#eef3ff",
+                color: "#3971d6",
+              },
+            }}
+          >
+            Dashboard
+          </Button>
 
-        <Button color="inherit" component={Link} to="/tasks">
-          Tasks
-        </Button>
+          <Button
+            component={Link}
+            to="/events"
+            disableRipple
+            sx={{
+              color: location.pathname === "/events" ? "#3971d6" : "#334155",
+              backgroundColor:
+                location.pathname === "/events" ? "#eef3ff" : "transparent",
+              borderRadius: "8px",
+              padding: "8px 14px",
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "15px",
+
+              "&:hover": {
+                backgroundColor: "#eef3ff",
+                color: "#3971d6",
+              },
+            }}
+          >
+            Events
+          </Button>
+
+          <Button
+            component={Link}
+            to="/tasks"
+            disableRipple
+            sx={{
+              color: location.pathname === "/tasks" ? "#3971d6" : "#334155",
+              backgroundColor:
+                location.pathname === "/tasks" ? "#eef3ff" : "transparent",
+              borderRadius: "8px",
+              padding: "8px 14px",
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "15px",
+
+              "&:hover": {
+                backgroundColor: "#eef3ff",
+                color: "#3971d6",
+              },
+            }}
+          >
+            Tasks
+          </Button>
+        </Box>
 
         {/* Notifications and profile. */}
         <Box
@@ -145,12 +223,35 @@ useEffect(() => {
         >
           {/* Notifications button. */}
           <IconButton
-            color="inherit"
             onClick={openNotifications}
             aria-label="Notifications"
+            sx={{
+              width: 42,
+              height: 42,
+              color: "#172554",
+              border: "1px solid #dbe3f3",
+              borderRadius: "10px",
+              marginRight: 1.5,
+
+              "&:hover": {
+                backgroundColor: "#f3f6ff",
+                borderColor: "#9bb7ee",
+              },
+            }}
           >
-            <Badge badgeContent={unreadNotifications} color="error">
-              <NotificationsIcon />
+            <Badge
+              badgeContent={unreadNotifications}
+              color="error"
+              sx={{
+                "& .MuiBadge-badge": {
+                  fontSize: "11px",
+                  minWidth: 18,
+                  height: 18,
+                  fontWeight: 700,
+                },
+              }}
+            >
+              <NotificationsIcon sx={{ fontSize: 22 }} />
             </Badge>
           </IconButton>
 
@@ -292,23 +393,28 @@ useEffect(() => {
           </Menu>
 
           {/* Profile button. */}
-          <IconButton
-            color="inherit"
+          <Button
+            variant="outlined"
             onClick={openProfile}
-            aria-label="Profile"
-          >
-            <AccountCircleIcon />
-          </IconButton>
-
-          <Typography
-            component="span"
+            startIcon={<AccountCircleIcon />}
             sx={{
-              marginLeft: 1,
-              fontSize: 15,
+              height: 42,
+              borderRadius: "10px",
+              textTransform: "none",
+              fontWeight: 600,
+              color: "#172554",
+              borderColor: "#dbe3f3",
+              paddingLeft: 2,
+              paddingRight: 2,
+
+              "&:hover": {
+                backgroundColor: "#f3f6ff",
+                borderColor: "#9bb7ee",
+              },
             }}
           >
             Profile
-          </Typography>
+          </Button>
 
           {/* Profile menu. */}
           <Menu

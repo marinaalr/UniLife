@@ -1,0 +1,83 @@
+/* Main navbar */
+.dashboard-navbar {
+  background-color: #ffffff !important;
+  color: #14204f !important;
+
+  box-shadow: none !important;
+  border-bottom: 1px solid #eef0f5;
+}
+
+
+/* Content inside the navbar */
+.dashboard-navbar-toolbar {
+  min-height: 72px !important;
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+}
+
+
+/* UniLife name */
+.dashboard-navbar-logo {
+  margin-right: 38px !important;
+
+  font-size: 25px !important;
+  font-weight: 700 !important;
+
+  color: #14204f;
+}
+
+
+/* Navigation links */
+.dashboard-navbar-link {
+  margin-right: 8px !important;
+  padding: 8px 14px !important;
+
+  color: #25345f !important;
+
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+
+  border-radius: 8px !important;
+}
+
+
+/* Hover effect for navigation links */
+.dashboard-navbar-link:hover {
+  background-color: #eef3ff !important;
+  color: #3971d6 !important;
+}
+
+
+/* Right side of the navbar */
+.dashboard-navbar-actions {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+/* Notification and profile icons */
+.dashboard-navbar-icon {
+  color: #25345f !important;
+}
+
+
+/* Hover effect for icons */
+.dashboard-navbar-icon:hover {
+  background-color: #eef3ff !important;
+  color: #3971d6 !important;
+}
+
+
+/* Profile text */
+.dashboard-navbar-profile-text {
+  margin-left: 4px !important;
+
+  color: #25345f;
+
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
