@@ -37,14 +37,14 @@ const loadTasks = async () => {
 
 
 // Save the logged in user's tasks.
-const saveUserTasks = async (lists) => {
+const saveUserTasks = async (tasks) => {
     const token = localStorage.getItem("token");
 
     try {
         // Ask the service to save the tasks to the backend.
         const { response, data } = await saveTasks(
             token,
-            lists,
+            tasks,
         );
 
         return {

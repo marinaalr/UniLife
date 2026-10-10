@@ -24,7 +24,7 @@ const getTasks = async (token) => {
 };
 
 
-const saveTasks = async (token, lists) => {
+const saveTasks = async (token, tasks) => {
     // Save the user's tasks to the backend.
     const response = await fetch(
         "http://localhost:5000/api/tasks",
@@ -35,7 +35,7 @@ const saveTasks = async (token, lists) => {
                 Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-                lists,
+                tasks,
             }),
         },
     );
