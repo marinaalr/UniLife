@@ -8,6 +8,11 @@ import {
   IconButton,
   TextField,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 
 // Import icons for editing and deleting tasks
@@ -23,6 +28,9 @@ import "./TasksPage.css";
 
 
 function TasksPage() {
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   // Store all tasks
   const [tasks, setTasks] = useState([]);
@@ -178,27 +186,24 @@ function TasksPage() {
     saveTasks(updatedTasks);
   }
 
-  // Delete a task
+  // Open the delete confirmation dialog
   function deleteTask(taskId) {
+    setTaskToDelete(taskId);
+    setDeleteDialogOpen(true);
+  }
 
-    // Ask the user before deleting
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this task?"
-    );
 
-    // Stop if the user clicks Cancel
-    if (!confirmDelete) {
-      return;
-    }
+  // Delete the task after confirmation
+  function confirmDeleteTask() {
 
-    // Keep all tasks except the task that should be deleted
     const updatedTasks = tasks.filter(
-      (task) => task.id !== taskId
+      (task) => task.id !== taskToDelete
     );
 
-    // Save the updated tasks
     setTasks(updatedTasks);
-    saveTasks(updatedTasks);
+
+    setDeleteDialogOpen(false);
+    setTaskToDelete(null);
   }
 
   // Start editing a task
@@ -389,6 +394,65 @@ function TasksPage() {
         </Box>
 
       </Box>
+      {/* Confirm task deletion */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => {
+          setDeleteDialogOpen(false);
+          setTaskToDelete(null);
+        }}
+        PaperProps={{
+          sx: {
+            borderRadius: "14px",
+            padding: "8px",
+            minWidth: "380px",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            color: "#172554",
+            fontWeight: 700,
+          }}
+        >
+          Delete task?
+        </DialogTitle>
+
+        <DialogContent>
+          <DialogContentText sx={{ color: "#64748b" }}>
+            Are you sure you want to delete this task?
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions sx={{ padding: "8px 16px 16px" }}>
+          <Button
+            onClick={() => {
+              setDeleteDialogOpen(false);
+              setTaskToDelete(null);
+            }}
+            sx={{
+              textTransform: "none",
+              fontWeight: 600,
+            }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            variant="contained"
+            color="error"
+            onClick={confirmDeleteTask}
+            sx={{
+              borderRadius: "10px",
+              textTransform: "none",
+              fontWeight: 600,
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </>
   );
 }

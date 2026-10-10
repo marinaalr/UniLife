@@ -10,6 +10,11 @@ import {
   MenuItem,
   Badge,
   Divider,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import {
   Notifications as NotificationsIcon,
@@ -34,6 +39,7 @@ function DashboardNavbar() {
 
   // Store the element that opens the profile menu.
   const [profileAnchor, setProfileAnchor] = useState(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   // Get notifications from the controller.
   const fetchNotifications = useCallback(async () => {
@@ -438,10 +444,66 @@ function DashboardNavbar() {
               Settings
             </MenuItem>
 
-            <MenuItem onClick={handleLogout}>
+            <MenuItem
+              onClick={() => {
+                closeProfile();
+                setLogoutDialogOpen(true);
+              }}
+            >
               Log out
             </MenuItem>
           </Menu>
+          {/* Confirm logout dialog */}
+          <Dialog
+            open={logoutDialogOpen}
+            onClose={() => setLogoutDialogOpen(false)}
+            PaperProps={{
+              sx: {
+                borderRadius: "14px",
+                padding: "8px",
+                minWidth: "380px",
+              },
+            }}
+          >
+            <DialogTitle
+              sx={{
+                color: "#172554",
+                fontWeight: 700,
+              }}
+            >
+              Log out?
+            </DialogTitle>
+
+            <DialogContent>
+              <DialogContentText sx={{ color: "#64748b" }}>
+                Are you sure you want to log out?
+              </DialogContentText>
+            </DialogContent>
+
+            <DialogActions sx={{ padding: "8px 16px 16px" }}>
+              <Button
+                onClick={() => setLogoutDialogOpen(false)}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                variant="contained"
+                onClick={handleLogout}
+                sx={{
+                  borderRadius: "10px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+              >
+                Log out
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Toolbar>
     </AppBar>
