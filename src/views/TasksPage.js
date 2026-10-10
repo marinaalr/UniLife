@@ -25,7 +25,10 @@ import DashboardNavbar from "./components/DashboardNavbar";
 
 // Import CSS for this page
 import "./TasksPage.css";
-
+import {
+  loadTasks,
+  saveUserTasks,
+} from "../controllers/taskController";
 
 function TasksPage() {
 
@@ -45,48 +48,29 @@ function TasksPage() {
   // Store which task is being edited
   const [editingTaskId, setEditingTaskId] = useState(null);
 
-  // Load tasks from the database when the page opens
-  useEffect(() => {
+// Load tasks from the database when the page opens
+useEffect(() => {
 
-    async function loadTasks() {
-      const token = localStorage.getItem("token");
+  async function fetchTasks() {
+    const result = await loadTasks();
 
-      const response = await fetch("http://localhost:5000/api/tasks", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setTasks(data.tasks);
-      }
+    if (result.success) {
+      setTasks(result.data.tasks);
     }
-
-    loadTasks();
-
-  }, []);
-
-  // Save tasks to the database
-  async function saveTasks(updatedTasks) {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch("http://localhost:5000/api/tasks", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        tasks: updatedTasks,
-      }),
-    });
-
-    const data = await response.json();
-
-    console.log("Save status:", response.status);
-    console.log("Save response:", data);
   }
+
+  fetchTasks();
+
+}, []);
+
+ // Save tasks through the controller
+async function saveTasks(updatedTasks) {
+  const result = await saveUserTasks(updatedTasks);
+
+  if (!result.success) {
+    console.log("Could not save tasks.");
+  }
+}
 
   // Create a new task
   function createTask() {
@@ -194,13 +178,16 @@ function TasksPage() {
 
 
   // Delete the task after confirmation
-  function confirmDeleteTask() {
+  async function confirmDeleteTask() {
 
     const updatedTasks = tasks.filter(
       (task) => task.id !== taskToDelete
     );
 
     setTasks(updatedTasks);
+
+    // Save the deletion through the controller
+    await saveTasks(updatedTasks);
 
     setDeleteDialogOpen(false);
     setTaskToDelete(null);
