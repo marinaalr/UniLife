@@ -32,34 +32,36 @@ function Dashboard() {
   // Control whether the selected day dialog is open.
   const [dayDialogOpen, setDayDialogOpen] = useState(false);
 
-  // Store the task lists loaded for the logged in user.
-  const [taskLists, setTaskLists] = useState([]);
+  // Store the tasks loaded for the logged in user
+  const [tasks, setTasks] = useState([]);
 
-  // Load the logged in user's task lists from the server.
-useEffect(() => {
-  async function loadUserTasks() {
-    const result = await loadTasks();
+  // Load the logged in user's tasks from the server
+  useEffect(() => {
+    async function loadTasks() {
+      const token = localStorage.getItem("token");
 
-    if (result.success) {
-      setTaskLists(result.data.lists);
-    } else {
-      console.log("Could not load tasks.");
+      try {
+        const response = await fetch("http://localhost:5000/api/tasks", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setTasks(data.tasks || []);
+        }
+      } catch {
+        console.log("Could not load tasks.");
+      }
     }
-  }
 
-  loadUserTasks();
-}, []);
+    loadTasks();
+  }, []);
 
-  // Collect all tasks from all task lists.
-  const allTasks = taskLists.flatMap((list) =>
-    list.tasks.map((task) => ({
-      ...task,
-      listName: list.name,
-    })),
-  );
-
-  // Keep only tasks that are not completed.
-  const pendingTasks = allTasks
+  // Keep only tasks that are not completed
+  const pendingTasks = tasks
     .filter((task) => !task.completed)
     .sort((a, b) => {
       if (!a.deadline) return 1;
@@ -67,6 +69,7 @@ useEffect(() => {
 
       return a.deadline.localeCompare(b.deadline);
     });
+
 
   // Find pending tasks with a deadline within the next 5 days.
   const todayStart = new Date();
@@ -180,7 +183,7 @@ useEffect(() => {
   const getTasksForDay = (day) => {
     const calendarDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    return allTasks.filter((task) => task.deadline === calendarDate);
+    return tasks.filter((task) => task.deadline === calendarDate);
   };
 
   return (
@@ -358,13 +361,12 @@ useEffect(() => {
                         </Typography>
 
                         <Typography
-                          className={`days-left-badge ${
-                            getDaysLeft(task.deadline) <= 1
+                          className={`days-left-badge ${getDaysLeft(task.deadline) <= 1
                               ? "days-left-urgent"
                               : getDaysLeft(task.deadline) <= 3
                                 ? "days-left-soon"
                                 : "days-left-normal"
-                          }`}
+                            }`}
                         >
                           {getDaysLeft(task.deadline) === 0
                             ? "Due today"

@@ -1,764 +1,398 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import DashboardNavbar from './components/DashboardNavbar';
-
+// Import Material UI components
 import {
   Box,
   Button,
+  Checkbox,
+  IconButton,
   TextField,
-  Typography
-} from '@mui/material';
+  Typography,
+} from "@mui/material";
 
-import TaskSidebar from './components/tasks/TaskSidebar';
-import TaskList from './components/tasks/TaskList';
-import TaskDialogs from './components/tasks/TaskDialogs';
+// Import icons for editing and deleting tasks
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-import {
-  loadTasks,
-  saveUserTasks
-} from '../controllers/taskController';
 
-import './TasksPage.css';
+// Import the dashboard navigation bar
+import DashboardNavbar from "./components/DashboardNavbar";
+
+// Import CSS for this page
+import "./TasksPage.css";
 
 
 function TasksPage() {
 
-  // Store all lists
-  const [lists, setLists] = useState([]);
-  const [tasksLoaded, setTasksLoaded] = useState(false);
-
-  // Store the selected list
-  const [selectedListId, setSelectedListId] = useState(null);
-
-  // Store the new list name
-  const [newListName, setNewListName] = useState('');
-
-  // Show or hide the new list form
-  const [showNewList, setShowNewList] = useState(false);
+  // Store all tasks
+  const [tasks, setTasks] = useState([]);
 
   // Show or hide the new task form
   const [showNewTask, setShowNewTask] = useState(false);
 
-  // Store information for a new task
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
-  const [taskDeadline, setTaskDeadline] = useState('');
-  const [taskPriority, setTaskPriority] = useState('Medium');
-
-  // Store the selected filter
-  const [filter, setFilter] = useState('All');
-
-  // Store the task that is being edited
+  // Store information for the new task
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+  // Store which task is being edited
   const [editingTaskId, setEditingTaskId] = useState(null);
 
-  // Store information while editing a task
-  const [editTaskTitle, setEditTaskTitle] = useState('');
-  const [editTaskDescription, setEditTaskDescription] = useState('');
-  const [editTaskDeadline, setEditTaskDeadline] = useState('');
-  const [editTaskPriority, setEditTaskPriority] = useState('Medium');
+  // Load tasks from the database when the page opens
+  useEffect(() => {
 
-  // Store list editing information
-  const [editingListName, setEditingListName] = useState(false);
-  const [editListName, setEditListName] = useState('');
+    async function loadTasks() {
+      const token = localStorage.getItem("token");
 
-  // Show or hide the invalid date message
-  const [showDateError, setShowDateError] = useState(false);
+      const response = await fetch("http://localhost:5000/api/tasks", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  // Store what should be deleted
-  const [deleteType, setDeleteType] = useState(null);
-  const [deleteTaskId, setDeleteTaskId] = useState(null);
-
-
-// Load the logged in user's tasks
-// First UseEffect bring the saved tasks
-// Second UseEffect is used when lists changes 
-// Load the logged in user's tasks.
-useEffect(() => {
-  async function loadUserTasks() {
-    const result = await loadTasks();
-
-    if (result.success) {
-      setLists(result.data.lists);
-
-      if (result.data.lists.length > 0) {
-        setSelectedListId(result.data.lists[0].id);
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data.tasks);
       }
-
-      setTasksLoaded(true);
-    } else {
-      console.log("Could not load tasks.");
-    }
-  }
-
-  loadUserTasks();
-}, []);
-
-
-// Save tasks whenever the lists change
-useEffect(() => {
-  if (!tasksLoaded) {
-    return;
-  }
-
-  async function saveUserTaskLists() {
-    const result = await saveUserTasks(lists);
-
-    if (!result.success) {
-      console.log("Could not save tasks.");
-    }
-  }
-
-  saveUserTaskLists();
-
-}, [lists, tasksLoaded]);
-
-  // Get today's date
-  const today = new Date().toLocaleDateString('en-CA');
-
-
-  // Find the selected list
-  const selectedList = lists.find(
-    (list) => list.id === selectedListId
-  );
-
-
-  // Create a new list
-  function createList() {
-
-    if (newListName.trim() === '') {
-      return;
     }
 
-    const newList = {
-      id: Date.now(),
-      name: newListName.trim(),
-      tasks: []
-    };
+    loadTasks();
 
-    setLists([...lists, newList]);
+  }, []);
 
-    setSelectedListId(newList.id);
+  // Save tasks to the database
+  async function saveTasks(updatedTasks) {
+    const token = localStorage.getItem("token");
 
-    setNewListName('');
-    setShowNewList(false);
-  }
-
-
-  // Select a list
-  function selectList(listId) {
-
-    setSelectedListId(listId);
-
-    setFilter('All');
-    setShowNewTask(false);
-    setEditingListName(false);
-
-    cancelEditingTask();
-  }
-
-
-  // Move a list
-  function moveList(draggedListId, targetListId) {
-
-    const draggedIndex = lists.findIndex(
-      (list) => list.id === draggedListId
-    );
-
-    const targetIndex = lists.findIndex(
-      (list) => list.id === targetListId
-    );
-
-    if (draggedIndex === -1 || targetIndex === -1) {
-      return;
-    }
-
-    const updatedLists = [...lists];
-
-    const [movedList] = updatedLists.splice(
-      draggedIndex,
-      1
-    );
-
-    updatedLists.splice(
-      targetIndex,
-      0,
-      movedList
-    );
-
-    setLists(updatedLists);
-  }
-
-
-  // Move a task
-  function moveTask(draggedTaskId, targetTaskId) {
-
-    if (!selectedList) {
-      return;
-    }
-
-    const updatedLists = lists.map((list) => {
-
-      if (list.id !== selectedListId) {
-        return list;
-      }
-
-      const updatedTasks = [...list.tasks];
-
-      const draggedIndex = updatedTasks.findIndex(
-        (task) => task.id === draggedTaskId
-      );
-
-      const targetIndex = updatedTasks.findIndex(
-        (task) => task.id === targetTaskId
-      );
-
-      if (draggedIndex === -1 || targetIndex === -1) {
-        return list;
-      }
-
-      const [movedTask] = updatedTasks.splice(
-        draggedIndex,
-        1
-      );
-
-      updatedTasks.splice(
-        targetIndex,
-        0,
-        movedTask
-      );
-
-      return {
-        ...list,
-        tasks: updatedTasks
-      };
+    const response = await fetch("http://localhost:5000/api/tasks", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tasks: updatedTasks,
+      }),
     });
 
-    setLists(updatedLists);
+    const data = await response.json();
+
+    console.log("Save status:", response.status);
+    console.log("Save response:", data);
   }
-
-
-  // Start editing a list name
-  function startEditingList() {
-
-    if (!selectedList) {
-      return;
-    }
-
-    setEditListName(selectedList.name);
-    setEditingListName(true);
-  }
-
-
-  // Save the edited list name
-  function saveListName() {
-
-    if (editListName.trim() === '' || !selectedList) {
-      return;
-    }
-
-    const updatedLists = lists.map((list) => {
-
-      if (list.id === selectedList.id) {
-        return {
-          ...list,
-          name: editListName.trim()
-        };
-      }
-
-      return list;
-    });
-
-    setLists(updatedLists);
-
-    setEditingListName(false);
-    setEditListName('');
-  }
-
-
-  // Cancel editing the list name
-  function cancelEditingList() {
-
-    setEditingListName(false);
-    setEditListName('');
-  }
-
-
-  // Ask before deleting a list
-  function askDeleteList() {
-
-    if (!selectedList) {
-      return;
-    }
-
-    setDeleteType('list');
-  }
-
-
-  // Delete the selected list
-  function deleteList() {
-
-    if (!selectedList) {
-      return;
-    }
-
-    const updatedLists = lists.filter(
-      (list) => list.id !== selectedList.id
-    );
-
-    setLists(updatedLists);
-
-    if (updatedLists.length > 0) {
-      setSelectedListId(updatedLists[0].id);
-    } else {
-      setSelectedListId(null);
-    }
-
-    setEditingListName(false);
-  }
-
 
   // Create a new task
   function createTask() {
 
-    if (taskTitle.trim() === '' || !selectedList) {
+    // A task must have a title
+    if (title.trim() === "") {
       return;
     }
 
-    if (taskDeadline && taskDeadline < today) {
-      setShowDateError(true);
+    // Update a task if we are editing
+    if (editingTaskId !== null) {
+
+      const updatedTasks = tasks.map((task) => {
+
+        if (task.id === editingTaskId) {
+          return {
+            ...task,
+            title: title,
+            description: description,
+            deadline: deadline,
+          };
+        }
+
+        return task;
+      });
+
+      setTasks(updatedTasks);
+      saveTasks(updatedTasks);
+
+      // Stop editing
+      setEditingTaskId(null);
+
+      // Clear the form
+      setTitle("");
+      setDescription("");
+      setDeadline("");
+
+      // Close the form
+      setShowNewTask(false);
+
       return;
     }
 
+    // Create the task object
     const newTask = {
       id: Date.now(),
-      title: taskTitle.trim(),
-      description: taskDescription.trim(),
-      deadline: taskDeadline,
-      priority: taskPriority,
-      completed: false
+      title: title,
+      description: description,
+      deadline: deadline,
+      completed: false,
     };
 
-    const updatedLists = lists.map((list) => {
+    // Add the task to the array
+    const updatedTasks = [...tasks, newTask];
 
-      if (list.id === selectedList.id) {
-        return {
-          ...list,
-          tasks: [...list.tasks, newTask]
-        };
-      }
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
 
-      return list;
-    });
+    // Clear the form
+    setTitle("");
+    setDescription("");
+    setDeadline("");
 
-    setLists(updatedLists);
-
-    clearNewTaskForm();
-  }
-
-
-  // Clear and close the new task form
-  function clearNewTaskForm() {
-
-    setTaskTitle('');
-    setTaskDescription('');
-    setTaskDeadline('');
-    setTaskPriority('Medium');
-
+    // Close the form
     setShowNewTask(false);
   }
 
 
-  // Start editing a task
-  function startEditingTask(task) {
-
-    setEditingTaskId(task.id);
-
-    setEditTaskTitle(task.title);
-    setEditTaskDescription(task.description);
-    setEditTaskDeadline(task.deadline);
-    setEditTaskPriority(task.priority);
-  }
-
-
-  // Save an edited task
-  function saveEditedTask() {
-
-    if (editTaskTitle.trim() === '') {
-      return;
-    }
-
-    if (editTaskDeadline && editTaskDeadline < today) {
-      setShowDateError(true);
-      return;
-    }
-
-    const updatedLists = lists.map((list) => {
-
-      if (list.id === selectedListId) {
-
-        const updatedTasks = list.tasks.map((task) => {
-
-          if (task.id === editingTaskId) {
-            return {
-              ...task,
-              title: editTaskTitle.trim(),
-              description: editTaskDescription.trim(),
-              deadline: editTaskDeadline,
-              priority: editTaskPriority
-            };
-          }
-
-          return task;
-        });
-
-        return {
-          ...list,
-          tasks: updatedTasks
-        };
-      }
-
-      return list;
-    });
-
-    setLists(updatedLists);
-
-    cancelEditingTask();
-  }
-
-
-  // Cancel editing a task
-  function cancelEditingTask() {
-
+  // Close the form without creating a task
+  function cancelNewTask() {
+    setTitle("");
+    setDescription("");
+    setDeadline("");
     setEditingTaskId(null);
-
-    setEditTaskTitle('');
-    setEditTaskDescription('');
-    setEditTaskDeadline('');
-    setEditTaskPriority('Medium');
+    setShowNewTask(false);
   }
 
-
-  // Change completed status
+  // Mark a task as completed or not completed
   function toggleTask(taskId) {
 
-    const updatedLists = lists.map((list) => {
+    // Go through all tasks
+    const updatedTasks = tasks.map((task) => {
 
-      if (list.id === selectedListId) {
-
-        const updatedTasks = list.tasks.map((task) => {
-
-          if (task.id === taskId) {
-            return {
-              ...task,
-              completed: !task.completed
-            };
-          }
-
-          return task;
-        });
-
+      // Find the task that was clicked
+      if (task.id === taskId) {
         return {
-          ...list,
-          tasks: updatedTasks
+          ...task,
+          completed: !task.completed,
         };
       }
 
-      return list;
+      return task;
     });
 
-    setLists(updatedLists);
+    // Save the updated tasks
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
   }
-
-
-  // Ask before deleting a task
-  function askDeleteTask(taskId) {
-
-    setDeleteTaskId(taskId);
-    setDeleteType('task');
-  }
-
 
   // Delete a task
   function deleteTask(taskId) {
 
-    const updatedLists = lists.map((list) => {
+    // Ask the user before deleting
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
 
-      if (list.id === selectedListId) {
-        return {
-          ...list,
-          tasks: list.tasks.filter(
-            (task) => task.id !== taskId
-          )
-        };
-      }
-
-      return list;
-    });
-
-    setLists(updatedLists);
-
-    if (editingTaskId === taskId) {
-      cancelEditingTask();
+    // Stop if the user clicks Cancel
+    if (!confirmDelete) {
+      return;
     }
+
+    // Keep all tasks except the task that should be deleted
+    const updatedTasks = tasks.filter(
+      (task) => task.id !== taskId
+    );
+
+    // Save the updated tasks
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
   }
 
+  // Start editing a task
+  function editTask(task) {
 
-  // Confirm the delete action
-  function confirmDelete() {
+    // Put the task information in the form
+    setTitle(task.title);
+    setDescription(task.description);
+    setDeadline(task.deadline);
 
-    if (deleteType === 'list') {
-      deleteList();
-    }
+    // Remember which task is being edited
+    setEditingTaskId(task.id);
 
-    if (
-      deleteType === 'task' &&
-      deleteTaskId !== null
-    ) {
-      deleteTask(deleteTaskId);
-    }
-
-    closeDeleteDialog();
+    // Open the form
+    setShowNewTask(true);
   }
-
-
-  // Close the delete message
-  function closeDeleteDialog() {
-
-    setDeleteType(null);
-    setDeleteTaskId(null);
-  }
-
-
-  // Check if a task is overdue
-  function isOverdue(task) {
-
-    if (!task.deadline || task.completed) {
-      return false;
-    }
-
-    return task.deadline < today;
-  }
-
-
-  // Get tasks based on the selected filter
-  function getFilteredTasks() {
-
-    if (!selectedList) {
-      return [];
-    }
-
-    if (filter === 'Active') {
-      return selectedList.tasks.filter(
-        (task) => !task.completed
-      );
-    }
-
-    if (filter === 'Completed') {
-      return selectedList.tasks.filter(
-        (task) => task.completed
-      );
-    }
-
-    return selectedList.tasks;
-  }
-
-
-  // Calculate task progress
-  const totalTasks = selectedList
-    ? selectedList.tasks.length
-    : 0;
-
-  const completedTasks = selectedList
-    ? selectedList.tasks.filter(
-        (task) => task.completed
-      ).length
-    : 0;
-
-  const progress = totalTasks === 0
-    ? 0
-    : (completedTasks / totalTasks) * 100;
-
-  const filteredTasks = getFilteredTasks();
-
 
   return (
     <>
+      {/* Dashboard navigation */}
       <DashboardNavbar />
 
+      {/* Main page */}
+      <Box className="task-page">
 
-      <Box className="tasks-page">
 
-        {/* Page header */}
-        <Box className="tasks-header">
+        {/* Top section */}
+        <Box className="task-header">
 
+          {/* Title and subtitle */}
           <Box>
-
-            <Typography variant="h4">
+            <Typography variant="h3" className="task-page-title">
               Tasks
             </Typography>
 
-            <Typography className="tasks-subtitle">
+            <Typography className="task-page-subtitle">
               Keep track of your university work
             </Typography>
-
           </Box>
 
 
+          {/* Open the new task form */}
           <Button
             variant="contained"
-            onClick={() => setShowNewList(true)}
+            onClick={() => setShowNewTask(true)}
           >
-            + New list
+            + New task
           </Button>
 
         </Box>
 
 
-        {/* New list form */}
-        {showNewList && (
-
-          <Box className="new-list-form">
-
-            <TextField
-              label="List name"
-              size="small"
-              autoFocus
-              value={newListName}
-
-              onChange={(event) =>
-                setNewListName(event.target.value)
-              }
-
-              onKeyDown={(event) => {
-
-                if (event.key === 'Enter') {
-                  createList();
-                }
-
-              }}
-            />
+        {/* Large background container */}
+        <Box className="task-board">
 
 
-            <Button
-              onClick={() => {
-                setShowNewList(false);
-                setNewListName('');
-              }}
+          {/* New task form */}
+          {showNewTask && (
+            <Box className="new-task-card">
+
+              <Typography variant="h5">
+                {editingTaskId !== null ? "Edit task" : "Add task"}
+              </Typography>
+
+
+              {/* Task title */}
+              <TextField
+                label="Task name"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
+
+
+              {/* Task description */}
+              <TextField
+                label="Description"
+                multiline
+                rows={3}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              />
+
+
+              {/* Task deadline */}
+              <Box>
+                <Typography className="input-label">
+                  Deadline
+                </Typography>
+
+                <TextField
+                  type="date"
+                  fullWidth
+                  value={deadline}
+                  onChange={(event) => setDeadline(event.target.value)}
+                />
+              </Box>
+
+
+              {/* Form buttons */}
+              <Box className="task-form-buttons">
+
+                <Button onClick={cancelNewTask}>
+                  Cancel
+                </Button>
+
+                <Button
+                  variant="contained"
+                  onClick={createTask}
+                >
+                  {editingTaskId !== null ? "Save changes" : "Add task"}
+                </Button>
+
+              </Box>
+
+            </Box>
+          )}
+
+
+          {/* Message when there are no tasks */}
+          {!showNewTask && tasks.length === 0 && (
+            <Typography className="no-tasks">
+              No tasks yet.
+            </Typography>
+          )}
+
+
+          {/* Show all tasks */}
+          {editingTaskId === null && tasks.map((task) => (
+            <Box
+              className={`task-card ${task.completed ? "completed-task" : ""}`}
+              key={task.id}
             >
-              Cancel
-            </Button>
+
+              {/* Checkbox for completing the task */}
+              <Checkbox
+                checked={task.completed}
+                onChange={() => toggleTask(task.id)}
+              />
 
 
-            <Button
-              variant="contained"
-              onClick={createList}
-            >
-              Create
-            </Button>
+              {/* Task information */}
+              <Box className="task-content">
 
-          </Box>
-
-        )}
+                {/* Task title */}
+                <Typography variant="h6">
+                  {task.title}
+                </Typography>
 
 
-        {/* Main Tasks layout */}
-        <Box className="tasks-content">
-
-          <TaskSidebar
-            lists={lists}
-            selectedListId={selectedListId}
-            onSelectList={selectList}
-            onMoveList={moveList}
-          />
+                {/* Task description */}
+                {task.description && (
+                  <Typography className="task-description">
+                    {task.description}
+                  </Typography>
+                )}
 
 
-          <TaskList
-            selectedList={selectedList}
+                {/* Task deadline */}
+                {task.deadline && (
+                  <Typography className="task-deadline">
+                    Due: {task.deadline}
+                  </Typography>
+                )}
 
-            completedTasks={completedTasks}
-            totalTasks={totalTasks}
-            progress={progress}
+              </Box>
 
-            filter={filter}
-            filteredTasks={filteredTasks}
+              {/* Edit the task */}
+              <IconButton
+                className="task-action-button edit-task-button"
+                onClick={() => editTask(task)}
+                aria-label="Edit task"
+              >
+                <EditOutlinedIcon />
+              </IconButton>
 
-            showNewTask={showNewTask}
-            editingTaskId={editingTaskId}
+              {/* Delete the task */}
+              <IconButton
+                className="task-action-button delete-task-button"
+                onClick={() => deleteTask(task.id)}
+                aria-label="Delete task"
+              >
+                <DeleteOutlineOutlinedIcon />
+              </IconButton>
 
-            editingListName={editingListName}
-            editListName={editListName}
-
-            taskTitle={taskTitle}
-            taskDescription={taskDescription}
-            taskDeadline={taskDeadline}
-            taskPriority={taskPriority}
-
-            editTaskTitle={editTaskTitle}
-            editTaskDescription={editTaskDescription}
-            editTaskDeadline={editTaskDeadline}
-            editTaskPriority={editTaskPriority}
-
-            today={today}
-
-            onFilterChange={setFilter}
-
-            onDeleteList={askDeleteList}
-            onStartEditingList={startEditingList}
-            onEditListNameChange={setEditListName}
-            onSaveListName={saveListName}
-            onCancelEditingList={cancelEditingList}
-
-            onShowNewTask={() =>
-              setShowNewTask(true)
-            }
-
-            onTaskTitleChange={setTaskTitle}
-            onTaskDescriptionChange={setTaskDescription}
-            onTaskDeadlineChange={setTaskDeadline}
-            onTaskPriorityChange={setTaskPriority}
-
-            onCreateTask={createTask}
-            onCancelNewTask={clearNewTaskForm}
-
-            onToggleTask={toggleTask}
-            onStartEditingTask={startEditingTask}
-            onDeleteTask={askDeleteTask}
-            onMoveTask={moveTask}
-
-            onEditTaskTitleChange={setEditTaskTitle}
-            onEditTaskDescriptionChange={setEditTaskDescription}
-            onEditTaskDeadlineChange={setEditTaskDeadline}
-            onEditTaskPriorityChange={setEditTaskPriority}
-
-            onSaveEditedTask={saveEditedTask}
-            onCancelEditingTask={cancelEditingTask}
-
-            isOverdue={isOverdue}
-          />
+            </Box>
+          ))}
 
         </Box>
 
       </Box>
-
-
-      {/* Task messages */}
-      <TaskDialogs
-        showDateError={showDateError}
-
-        onCloseDateError={() =>
-          setShowDateError(false)
-        }
-
-        deleteType={deleteType}
-
-        onCloseDelete={closeDeleteDialog}
-
-        onConfirmDelete={confirmDelete}
-      />
-
     </>
   );
 }
 
 
+// Export the page
 export default TasksPage;
