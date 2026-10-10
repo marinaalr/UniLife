@@ -1,7 +1,7 @@
 const MongoTask = require("../models/MongoTask");
 const MongoNotification = require("../models/MongoNotification");
 
-// Get the logged in user's task lists.
+// Get the logged in user's tasks
 const getTasks = async (req, res) => {
     try {
         const userTasks = await MongoTask.findOne({
@@ -9,7 +9,7 @@ const getTasks = async (req, res) => {
         });
 
         res.json({
-            lists: userTasks ? userTasks.lists : [],
+            tasks: userTasks ? userTasks.tasks : [],
         });
     } catch {
         res.status(500).json({
@@ -18,38 +18,36 @@ const getTasks = async (req, res) => {
     }
 };
 
-// Save the logged in user's task lists.
+// Save the logged in user's tasks
 const saveTasks = async (req, res) => {
     try {
-        const { lists } = req.body;
+        const { tasks } = req.body;
 
-        if (!Array.isArray(lists)) {
+        if (!Array.isArray(tasks)) {
             return res.status(400).json({
                 message: "Invalid task data.",
             });
         }
 
-        // Save the task lists.
+        // Save the tasks
         const savedTasks = await MongoTask.findOneAndUpdate(
             {
                 userId: req.user.id,
             },
             {
                 userId: req.user.id,
-                lists: lists,
+                tasks: tasks,
             },
             {
-                returnDocument: "after",
+                new: true,
                 upsert: true,
             },
         );
 
-        // Collect all current tasks.
-        const currentTasks = lists.flatMap((list) => list.tasks);
+        // Get all current task IDs
+        const currentTaskIds = tasks.map((task) => task.id);
 
-        // Remove notifications for tasks that no longer exist.
-        const currentTaskIds = currentTasks.map((task) => task.id);
-
+        // Remove notifications for tasks that no longer exist
         await MongoNotification.deleteMany({
             userId: req.user.id,
             type: "task_deadline",
@@ -58,17 +56,19 @@ const saveTasks = async (req, res) => {
             },
         });
 
-        // Calculate today's date and the date five days from now.
+        // Calculate today's date
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
+        // Calculate the date five days from now
         const fiveDaysFromNow = new Date(today);
         fiveDaysFromNow.setDate(today.getDate() + 5);
 
-        // Create, update or remove deadline notifications.
-        for (const task of currentTasks) {
+        // Create, update or remove deadline notifications
+        for (const task of tasks) {
+
             // Completed tasks and tasks without deadlines
-            // should not have deadline notifications.
+            // should not have deadline notifications
             if (task.completed || !task.deadline) {
                 await MongoNotification.deleteMany({
                     userId: req.user.id,
@@ -81,8 +81,7 @@ const saveTasks = async (req, res) => {
 
             const deadlineDate = new Date(`${task.deadline}T00:00:00`);
 
-            // Remove notifications for deadlines outside
-            // the five-day notification window.
+            // Remove notifications outside the five-day window
             if (deadlineDate < today || deadlineDate > fiveDaysFromNow) {
                 await MongoNotification.deleteMany({
                     userId: req.user.id,
@@ -93,14 +92,14 @@ const saveTasks = async (req, res) => {
                 continue;
             }
 
-            // Calculate how many days remain.
+            // Calculate how many days remain
             const difference = deadlineDate - today;
 
             const daysLeft = Math.round(
                 difference / (1000 * 60 * 60 * 24),
             );
 
-            // Create the notification message.
+            // Create notification message
             let message;
 
             if (daysLeft === 0) {
@@ -111,7 +110,7 @@ const saveTasks = async (req, res) => {
                 message = `Task "${task.title}" is due in ${daysLeft} days.`;
             }
 
-            // Check whether a notification already exists.
+            // Check if notification already exists
             const existingNotification =
                 await MongoNotification.findOne({
                     userId: req.user.id,
@@ -120,7 +119,8 @@ const saveTasks = async (req, res) => {
                 });
 
             if (!existingNotification) {
-                // Create a new notification.
+
+                // Create notification
                 await MongoNotification.create({
                     userId: req.user.id,
                     message,
@@ -129,12 +129,14 @@ const saveTasks = async (req, res) => {
                     deadline: task.deadline,
                     read: false,
                 });
+
             } else {
-                // Update the notification.
-                // Keep it read if the deadline has not changed.
+
+                // Check if deadline changed
                 const deadlineChanged =
                     existingNotification.deadline !== task.deadline;
 
+                // Update notification
                 existingNotification.message = message;
                 existingNotification.deadline = task.deadline;
 
@@ -148,8 +150,9 @@ const saveTasks = async (req, res) => {
 
         res.json({
             message: "Tasks saved successfully.",
-            lists: savedTasks.lists,
+            tasks: savedTasks.tasks,
         });
+
     } catch {
         res.status(500).json({
             message: "Server error.",

@@ -7,27 +7,17 @@ const taskSchema = new mongoose.Schema(
     title: String,
     description: String,
     deadline: String,
-    priority: String,
-    completed: Boolean,
+    completed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     _id: false,
   },
 );
 
-// Describe one task list
-const listSchema = new mongoose.Schema(
-  {
-    id: Number,
-    name: String,
-    tasks: [taskSchema],
-  },
-  {
-    _id: false,
-  },
-);
-
-// Store all task lists that belong to one user
+// Store all tasks that belong to one user
 const userTasksSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -35,8 +25,8 @@ const userTasksSchema = new mongoose.Schema({
     unique: true,
   },
 
-  lists: {
-    type: [listSchema],
+  tasks: {
+    type: [taskSchema],
     default: [],
   },
 });
