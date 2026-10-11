@@ -8,7 +8,9 @@ import {
 import LoginForm from "../components/LoginForm";
 import "./Login.css";
 
+// Def. komponenten login, som visar loggningssidan
 function Login() {
+    //Returnerar vilket UI komponenten ska visa
     return (
         <Box className="login-page">
             <Paper className="login-card" elevation={3}>

@@ -12,17 +12,23 @@ import DashboardNavbar from "./components/DashboardNavbar";
 import "./Profile.css";
 import saveProfile from "../controllers/profileController";
 
+// Def. och exporterar senare komponenten Profile
 function Profile() {
+    //Hämtar sparad profilinformation från webbläsarens localStorage.
+    //Json.parse omvandlar JSOn text till ett JavaScript objekt
     const savedProfile = JSON.parse(
         localStorage.getItem("profile")
-    ) || {
+    ) || { //Om värdet saknas används objektet nedan (Standardvärden)
         name: "",
         username: "",
         email: ""
     };
 
+    //Skapar tillstånd för namnet och fyller det med det sparade värdet
     const [name, setName] = useState(savedProfile.name);
+    //Tillstånd för användarnämnet
     const [username, setUsername] = useState(savedProfile.username);
+    // Skapar ett tillstånd för e-postadressen
     const [email, setEmail] = useState(savedProfile.email);
     
     const [profilePicture, setProfilePicture] = useState(
@@ -45,23 +51,32 @@ function Profile() {
         savedProfile.bio || ""
     );
 
+    //Håller reda på om ändringarna har sparats
     const [saved, setSaved] = useState(false);
+    //Sparar evt. felmeddelande
     const [error, setError] = useState("");
 
 
+    //Hanterar när användaren väljer ny profilbild
     const handleProfilePictureChange = (event) => {
+        //Hämtar den första filen som användaren har valt
         const file = event.target.files[0];
 
+        //Avbryter om ingen fil har valt
         if(!file) {
             return;
         }
+        //Skapar en filereader för att läsa in bilden
         const reader = new FileReader();
 
         reader.onloadend = () => {
+            // Sparar bildens innehåll i komponentens tillstånd
             setProfilePicture(reader.result);
+            //Markerar att det finns ändringar som ännu inte sparats
             setSaved(false);
         };
 
+        //Omvandlar bilden till data URL
         reader.readAsDataURL(file);
     };
 
@@ -69,9 +84,11 @@ function Profile() {
 const handleSave = async (event) => {
     event.preventDefault();
 
+    //Rensar tidigare felmeddelanden och sparstatus
     setError("");
     setSaved(false);
 
+    //Samlar alla profilfält i ett objekt
     const profileData = {
         name,
         username,
@@ -83,6 +100,7 @@ const handleSave = async (event) => {
         bio,
     };
 
+    //Skickar profilinformationen till controllern för att sparas
     const result = await saveProfile(profileData);
 
     if (!result.success) {
@@ -90,11 +108,13 @@ const handleSave = async (event) => {
         return;
     }
 
+    //Sparar den uppdaterade profilen i webbläsarens localStorage
     localStorage.setItem(
         "profile",
         JSON.stringify(result.user),
     );
 
+    // Uppdaterar tillstånden med informationen som sparades
     setName(result.user.name);
     setUsername(result.user.username);
     setEmail(result.user.email);
@@ -104,6 +124,7 @@ const handleSave = async (event) => {
     setYearOfStudy(result.user.yearOfStudy || "");
     setBio(result.user.bio || "");
 
+    //Visar att ändringarna har sparats
     setSaved(true);
 };
 

@@ -14,8 +14,6 @@ import {
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardCard from "../components/DashboardCard";
 
-import { loadTasks } from "../controllers/taskController";
-
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -38,15 +36,19 @@ function Dashboard() {
   // Load the logged in user's tasks from the server
   useEffect(() => {
     async function loadTasks() {
+      // Hämtar inloggningstoken som används för att iden. användaren
       const token = localStorage.getItem("token");
 
       try {
+        //Skickar en förfrågan till serverns API för att hämta uppg.
         const response = await fetch("http://localhost:5000/api/tasks", {
           headers: {
+            //Skickar token så att servern kan kontrollera behörighet
             Authorization: `Bearer ${token}`,
           },
         });
 
+        //Omvandlar servern svar till Javascript data
         const data = await response.json();
 
         if (response.ok) {
@@ -64,9 +66,11 @@ function Dashboard() {
   const pendingTasks = tasks
     .filter((task) => !task.completed)
     .sort((a, b) => {
+      //Uppg uatn deadline placeras sist i listan
       if (!a.deadline) return 1;
       if (!b.deadline) return -1;
 
+      //Jämför datumen för att sortera uppgifterna i datumordning
       return a.deadline.localeCompare(b.deadline);
     });
 
@@ -75,24 +79,31 @@ function Dashboard() {
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
+  //Beräknar datumet 5 dagar framåt
   const fiveDaysFromNow = new Date(todayStart);
   fiveDaysFromNow.setDate(todayStart.getDate() + 5);
 
+  //Filterar fram uppg. som har en deadline inom de kommande fem dagar
   const approachingDeadlines = pendingTasks.filter((task) => {
+    //Hoppa över uppg som saknar deadline
     if (!task.deadline) {
       return false;
     }
 
+    // Omvandlar uppg deadline till ett datumonjekt
     const deadlineDate = new Date(`${task.deadline}T00:00:00`);
 
+    //Behåller endast deadlines mellan idag och fem dagar framåt
     return deadlineDate >= todayStart && deadlineDate <= fiveDaysFromNow;
   });
 
   // Calculate how many days are left until the deadline.
   function getDaysLeft(deadline) {
     const deadlineDate = new Date(`${deadline}T00:00:00`);
+    //Beräknar skillnaden i millisekunder mellan datumen
     const difference = deadlineDate - todayStart;
 
+    //Omvandlar millisekunder till hela dagar
     return Math.round(difference / (1000 * 60 * 60 * 24));
   }
 
@@ -134,7 +145,7 @@ function Dashboard() {
     calendarDays.push(day);
   }
 
-  // Move to the previous month.
+  // Move to the previous month. (ena if satsen för jan-dec)
   const previousMonth = () => {
     if (month === 0) {
       setMonth(11);
@@ -144,7 +155,7 @@ function Dashboard() {
     }
   };
 
-  // Move to the next month.
+  // Move to the next month. (ena if satsen för dec-jan)
   const nextMonth = () => {
     if (month === 11) {
       setMonth(0);
@@ -160,6 +171,7 @@ function Dashboard() {
       return;
     }
 
+    //Sparar den valda dagen och öppnar dialogrutan
     setSelectedDay(day);
     setDayDialogOpen(true);
   };
@@ -181,8 +193,10 @@ function Dashboard() {
 
   // Get all tasks that have a deadline on a specific calendar day.
   const getTasksForDay = (day) => {
+    //Skapar ett datum i formuläret (ÅÅÅÅ-MM-DD)
     const calendarDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
+    //Returnerar uppgifter vars deadline matchar kalenderdatumet
     return tasks.filter((task) => task.deadline === calendarDate);
   };
 
