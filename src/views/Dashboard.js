@@ -16,6 +16,13 @@ import DashboardCard from "../components/DashboardCard";
 
 import "./Dashboard.css";
 
+import {
+    loadDashboardTasks,
+    getPendingTasks,
+    getApproachingDeadlines,
+    getDaysLeft,
+} from "../controllers/dashboardController";
+
 function Dashboard() {
   // Get the current date to open the calendar on the current month.
   const today = new Date();
@@ -33,79 +40,30 @@ function Dashboard() {
   // Store the tasks loaded for the logged in user
   const [tasks, setTasks] = useState([]);
 
-  // Load the logged in user's tasks from the server
-  useEffect(() => {
-    async function loadTasks() {
-      // Hämtar inloggningstoken som används för att iden. användaren
-      const token = localStorage.getItem("token");
+// Hämtar uppgifterna som ska visas på Dashboard.
+useEffect(() => {
+    async function fetchDashboardTasks() {
+        // Hämtar uppgifterna genom Dashboard-controllern.
+        const result = await loadDashboardTasks();
 
-      try {
-        //Skickar en förfrågan till serverns API för att hämta uppg.
-        const response = await fetch("http://localhost:5000/api/tasks", {
-          headers: {
-            //Skickar token så att servern kan kontrollera behörighet
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        //Omvandlar servern svar till Javascript data
-        const data = await response.json();
-
-        if (response.ok) {
-          setTasks(data.tasks || []);
+        // Uppdaterar listan om hämtningen lyckades.
+        if (result.success) {
+            setTasks(result.tasks);
+        } else {
+            // Visar en tom lista om uppgifterna inte kunde hämtas.
+            setTasks([]);
+            console.error(result.message);
         }
-      } catch {
-        console.log("Could not load tasks.");
-      }
     }
 
-    loadTasks();
-  }, []);
+    fetchDashboardTasks();
+}, []);
 
-  // Keep only tasks that are not completed
-  const pendingTasks = tasks
-    .filter((task) => !task.completed)
-    .sort((a, b) => {
-      //Uppg uatn deadline placeras sist i listan
-      if (!a.deadline) return 1;
-      if (!b.deadline) return -1;
+// Hämtar de ofärdiga uppgifterna från controllern.
+const pendingTasks = getPendingTasks(tasks);
 
-      //Jämför datumen för att sortera uppgifterna i datumordning
-      return a.deadline.localeCompare(b.deadline);
-    });
-
-
-  // Find pending tasks with a deadline within the next 5 days.
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-
-  //Beräknar datumet 5 dagar framåt
-  const fiveDaysFromNow = new Date(todayStart);
-  fiveDaysFromNow.setDate(todayStart.getDate() + 5);
-
-  //Filterar fram uppg. som har en deadline inom de kommande fem dagar
-  const approachingDeadlines = pendingTasks.filter((task) => {
-    //Hoppa över uppg som saknar deadline
-    if (!task.deadline) {
-      return false;
-    }
-
-    // Omvandlar uppg deadline till ett datumonjekt
-    const deadlineDate = new Date(`${task.deadline}T00:00:00`);
-
-    //Behåller endast deadlines mellan idag och fem dagar framåt
-    return deadlineDate >= todayStart && deadlineDate <= fiveDaysFromNow;
-  });
-
-  // Calculate how many days are left until the deadline.
-  function getDaysLeft(deadline) {
-    const deadlineDate = new Date(`${deadline}T00:00:00`);
-    //Beräknar skillnaden i millisekunder mellan datumen
-    const difference = deadlineDate - todayStart;
-
-    //Omvandlar millisekunder till hela dagar
-    return Math.round(difference / (1000 * 60 * 60 * 24));
-  }
+// Hämtar uppgifterna med deadlines inom fem dagar.
+const approachingDeadlines = getApproachingDeadlines(tasks);
 
   // Names of the months used when displaying the calendar.
   const monthNames = [
