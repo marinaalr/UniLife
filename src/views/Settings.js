@@ -16,10 +16,12 @@ import updatePassword from "../controllers/settingsController";
 import "./Settings.css";
 
 function Settings() {
+    //Sparar användarens lösenordsuppg. 
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    //Sparar evt. felmeddelande och bekräftelsemeddelande
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
@@ -27,6 +29,7 @@ function Settings() {
 const handlePasswordChange = async (event) => {
     event.preventDefault();
 
+    //Kontrollerar att det nya lösenordet och bekräftelsen matchar
     if (newPassword !== confirmPassword) {
         setError("New passwords do not match.");
         return;
@@ -41,12 +44,15 @@ const handlePasswordChange = async (event) => {
         newPassword,
     );
 
+    //Visar ett felmeddelande om lösenordsbytet misslyckas
     if (!result.success) {
         setError(result.message);
         return;
     }
 
+    // Visar bekräftelsemeddelandet frpn controllern
     setSuccess(result.message);
+    //Tömmer lösenordsfältet efter ett lyckat byte
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");

@@ -13,7 +13,9 @@ import signupController from "../controllers/signupController";
 import "./sign_up.css";
 
 function Signup() {
+    //Skapar ett objekt som används för att navigera mellan sidor
     const history = useHistory();
+    //tillstånd för användarens namn osv. 
     const [name,setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -25,6 +27,7 @@ function Signup() {
 const handleSignup = async (event) => {
     event.preventDefault();
 
+    //Rensar tidigare meddelanden
     setError("");
     setSuccess("");
 
@@ -36,18 +39,22 @@ const handleSignup = async (event) => {
         password,
     );
 
+    //Visar ett felmeddelande om det misslyckades
     if (!result.success) {
         setError(result.message);
         return;
     }
 
+    //Visar bekräftelsemeddelandet från controllern
     setSuccess(result.message);
 
+    //Väntar en sekund innan användaren skickas till inloggningssidan
     setTimeout(() => {
         history.push("/login");
     }, 1000);
 };
 
+//Returnerar formuläret som visas på reg.sidan
     return (
         <Box 
             component= "form"
