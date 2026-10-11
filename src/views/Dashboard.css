@@ -1,4 +1,3 @@
-
 /* Huvudsidan för Dashboard */
 .dashboard-page {
     min-height: 100vh;
@@ -26,18 +25,17 @@
 /* Huvudrubrik */
 .dashboard-title {
     color: #172554;
-    font-size: 46px;
-    font-weight: 700;
-    letter-spacing: -1px;
+    font-size: 46px !important;
+    font-weight: 700 !important;
+    letter-spacing: -1px !important;
 }
 
 /* Underrubrik */
 .dashboard-subtitle {
-    margin-top: 6px;
+    margin-top: 6px !important;
     color: #64748b;
     font-size: 17px;
 }
-
 
 /* Kalenderkort */
 .calendar-card {
@@ -55,12 +53,12 @@
 
 .calendar-title {
     color: #172554;
-    font-size: 26px;
-    font-weight: 700;
+    font-size: 26px !important;
+    font-weight: 700 !important;
 }
 
 .calendar-description {
-    margin-top: 4px;
+    margin-top: 4px !important;
     color: #64748b;
     font-size: 14px;
 }
@@ -101,8 +99,8 @@
     padding: 12px 4px;
     text-align: center;
     color: #64748b;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 13px !important;
+    font-weight: 600 !important;
 }
 
 /* Kalenderns rutnät */
@@ -120,16 +118,13 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 7px;
-
     width: 100%;
     min-width: 0;
     min-height: 120px;
     padding: 10px;
-
     border-right: 1px solid #e2e7f2;
     border-bottom: 1px solid #e2e7f2;
     border-radius: 0;
-
     background: #ffffff;
     color: inherit;
     text-align: left;
@@ -159,8 +154,8 @@
 /* Dagnummer */
 .day-number {
     color: #172554;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 14px !important;
+    font-weight: 700 !important;
 }
 
 /* Översiktskort */
@@ -191,37 +186,37 @@
 .overview-title,
 .dialog-section-title {
     color: #172554;
-    font-weight: 700;
+    font-weight: 700 !important;
 }
 
 .overview-title {
-    margin-bottom: 15px;
-    font-size: 20px;
+    margin-bottom: 15px !important;
+    font-size: 20px !important;
 }
 
 /* Antal uppgifter */
 .overview-count {
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
     color: #3971d6;
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 32px !important;
+    font-weight: 700 !important;
 }
 
 /* Meddelande när det inte finns uppgifter */
 .empty-text {
     color: #8490a6;
-    font-size: 14px;
+    font-size: 14px !important;
 }
 
 /* Rubriker i dialogrutan */
 .dialog-section-title {
-    margin-top: 8px;
-    margin-bottom: 10px;
-    font-size: 18px;
+    margin-top: 8px !important;
+    margin-bottom: 10px !important;
+    font-size: 18px !important;
 }
 
 .day-dialog-text {
-    margin-bottom: 16px;
+    margin-bottom: 16px !important;
     color: #64748b;
 }
 
@@ -247,7 +242,7 @@
     }
 
     .dashboard-title {
-        font-size: 34px;
+        font-size: 34px !important;
     }
 
     .calendar-day.MuiButton-root {
@@ -258,12 +253,12 @@
 
     .calendar-weekday {
         padding: 8px 2px;
-        font-size: 11px;
+        font-size: 11px !important;
     }
 
     .calendar-task {
         padding: 4px;
-        font-size: 10px;
+        font-size: 10px !important;
     }
 }
 
@@ -285,7 +280,7 @@
 /* Uppgiftens titel */
 .pending-task-title {
     color: #172554;
-    font-weight: 600;
+    font-weight: 600 !important;
 }
 
 /* Information om uppgiften */
@@ -353,7 +348,6 @@
     border-radius: 5px;
     background: #e0eaff;
     color: #1d4ed8;
-    font-size: 11px;
+    font-size: 11px !important;
     overflow-wrap: anywhere;
 }
-
