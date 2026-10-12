@@ -46,7 +46,7 @@ function HomePage() {
             variant="h6"
             sx={{ marginTop: 2, color: "#475569"}}
           >
-            Stay organized, discover campus events, and connect with students.
+            Stay organized, manage your tasks, and discover campus events.
           </Typography>
 
         <Box
@@ -68,7 +68,13 @@ function HomePage() {
 
           <Button variant="outlined"
             href="#features" 
-            sx={{ borderRadius: "10px", fontWeight: 600}}>
+            sx={{ borderRadius: "10px", 
+                  fontWeight: 600,
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    transform: "translateY(-2px)",
+                  },
+                }}>
             Learn More
           </Button>
         </Box>
@@ -134,7 +140,12 @@ function HomePage() {
               width: 300,
               borderRadius: "16px",
               padding: 2,
-              boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
+              boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              "&:hover": {
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+              },
             }}
           >
             <CardContent>
@@ -177,7 +188,12 @@ function HomePage() {
               width: 300,
               borderRadius: "16px",
               padding: 2,
-              boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
+              boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              "&:hover": {
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+              },
             }}
           >
             <CardContent>
@@ -220,7 +236,12 @@ function HomePage() {
               width: 300,
               borderRadius: "16px",
               padding: 2,
-              boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
+              boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              "&:hover": {
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+              },
             }}
           >
             <CardContent>
@@ -241,7 +262,7 @@ function HomePage() {
                   color: "#172554"
                 }}
               >
-                Connect with students
+                Manage your university life
               </Typography>
 
               <Typography
@@ -250,7 +271,7 @@ function HomePage() {
                   color: "#64748b"
                 }}
               >
-                Meet new people, join activities and build your campus community.
+                Keep track of your tasks, deadlines, and university activities in one place.
               </Typography>
 
             </CardContent>
@@ -386,7 +407,7 @@ function HomePage() {
                   variant="h6"
                   sx={{ fontWeight: 700 }}
                 >
-                  👥 Friends
+                  ⏰ Deadlines & events
                 </Typography>
 
                 <Typography
@@ -395,7 +416,7 @@ function HomePage() {
                     color: "#64748b"
                   }}
                 >
-                  Connect with other students.
+                  Keep track of your upcoming deadlines and events.
                 </Typography>
               </CardContent>
             </Card>
@@ -433,7 +454,7 @@ function HomePage() {
               color: "#475569"
             }}
           >
-            Join UniLife and get access to events, tasks, and a vibrant student community.
+            Join UniLife to manage your tasks, track deadlines, and explore campus events.
           </Typography>
         </Box>
 
@@ -445,7 +466,11 @@ function HomePage() {
             borderRadius: "12px",
             padding: "12px 28px",
             fontWeight: 700,
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
+            transition: "all 0.2s ease",
+            "&:hover": {
+                 transform: "translateY(-2px)",
+            },
           }}
         >
           Get Started
