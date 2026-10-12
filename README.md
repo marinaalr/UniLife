@@ -4,9 +4,9 @@
 
 UniLife is a web application developed to provide university students with a centralized platform for organizing and managing various aspects of their academic and social lives. 
 
-The application enables users to discover and participate in campus events, organize personal tasks, and receive relevant notifications. Users can also customize their profiles and indicate their interests, allowing them to identify activities that correspond to their individual preferences. 
+The application enables users to discover and participate in campus events, organize personal tasks, and receive relevant notifications. Users can also customize their profiles to present information about themselves. 
 
-In addition, administrators are granted extended permissions to manage user accounts and oversee the content published within the application, including the moderation of events. 
+Administrators have additional permissions to manage user accounts and oversee the content published within the application, including the moderation of events. 
 
 Overall, UniLife is intended to offer a structured and convenient digital environment that brings together essential academic and social activities in one place. 
 
@@ -35,7 +35,6 @@ I, Ludvig Kågefors, declare that I am the sole author of the content that I add
 - Create a user account
 - Log in and log out
 - Manage personal profiles
-- Specify personal interests
 
 ### Event Management
 
@@ -89,10 +88,13 @@ I, Ludvig Kågefors, declare that I am the sole author of the content that I add
 ### User
 
 Stores account and profile information, including:
+- Username
 - Name
 - Email
-- User role
-- Interests
+- Profile picture
+- University
+- Field of study
+- Biography
 
 ### Event
 
@@ -127,9 +129,9 @@ Users can discover available campus events, view event information, and particip
 
 Users can organize their academic and organizational responsibilities by creating tasks, setting deadlines, and tracking their progress. 
 
-### Personalization
+### User Profiles
 
-Users can manage their profiles and specify their interests in order to discover activities that are relevant to them. 
+Users can manage their profiles including their name, profile picture, university, field of study, and a short biography. 
 
 ### Administration
 
@@ -151,27 +153,15 @@ The project is developed using the following technologies:
 
 
 ## Project Structure
-The project follows an MVC (Model-View-Controller) inspired structure. 
-
-### Components
-
-Contains reusable React components used throughout the application.
-
-### Models
-
-Defines the data models used by the application.
-
-### Model Data
-
-Contains predefined data used by the application. 
-
-### Views
-
-Contains the different views presented to users. 
-
-### Controllers
-
-Handles application logic and interactions between different parts of the application. 
+The project follows an MVC structure to seperate the user interface, application logic, and data handling. 
+- Components: Reusable Recat components.
+- Views: Pages and user interfaces. 
+- Controllers: Handle application logic. 
+- Services: Handle frontend operations and communication with the backend. 
+- Models: Define application data and support database operations.
+- Routes: Define backend API endpoints. 
+- Middleware: Processes requests before they reach the relevant route handlers. 
+- Server: Configures and starts the Express.js backend.  
 
 
 ## How to Run the Project
@@ -224,4 +214,15 @@ http://localhost:3000
 To create a production build of the application, run: 
 ```bash
 npm run build
+```
+
+### Code Quality
+
+Run ESLint using: 
+```bash
+npx eslint src
+```
+
+```bash
+npx eslint server
 ```
