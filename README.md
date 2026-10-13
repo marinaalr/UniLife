@@ -219,10 +219,9 @@ npm run build
 ### Code Quality
 
 Run ESLint using: 
-```bash
-npx eslint src
-```
+To check the source code using ESLint, run:
 
 ```bash
-npx eslint server
+npm run lint
 ```
+
