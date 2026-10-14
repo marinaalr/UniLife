@@ -3,7 +3,10 @@
 // och servicen samt bearbetar uppgifterna som ska visas.
 
 // Importerar servicen som hämtar uppgifter från backend.
-import getDashboardTasks from "../services/dashboardService";
+import {
+    getDashboardTasks,
+    getDashboardEvents,
+}from "../services/dashboardService";
 
 // Hämtar uppgifterna som ska visas på Dashboard.
 const loadDashboardTasks = async () => {
@@ -48,6 +51,48 @@ const loadDashboardTasks = async () => {
     }
 };
 
+const loadDashboardEvents = async () => {
+    // Hämtar token som identifierar den inloggade användaren.
+    const token = localStorage.getItem("token");
+
+    // Kontrollerar att användaren är inloggad.
+    if (!token) {
+        return {
+            success: false,
+            message: "You are not logged in.",
+            events: [],
+        };
+    }
+
+    try {
+        // Anropar servicen för att hämta uppgifterna.
+        const { response, data } = await getDashboardEvents(token);
+
+        // Kontrollerar om servern kunde hämta uppgifterna.
+        if (!response.ok) {
+            return {
+                success: false,
+                message: data.message || "Could not load dashboard tasks.",
+                events: [],
+            };
+        }
+
+        // Returnerar uppgifterna till vyn.
+        return {
+            success: true,
+            message: "",
+            events: Array.isArray(data.events) ? data.events : [],
+        };
+    } catch {
+        // Hanterar fel om servern inte kan nås.
+        return {
+            success: false,
+            message: "Could not connect to the server.",
+            events: [],
+        };
+    }
+};
+
 // Filtrerar fram uppgifter som inte är färdiga och sorterar dem efter deadline.
 const getPendingTasks = (tasks) => {
     return tasks
@@ -59,6 +104,19 @@ const getPendingTasks = (tasks) => {
 
             // Sorterar uppgifterna efter datum.
             return firstTask.deadline.localeCompare(secondTask.deadline);
+        });
+};
+
+const getPendingEvents = (events) => {
+    return events
+        .filter((event) => !event.passed)
+        .sort((firstEvent, secondEvent) => {
+            // Uppgifter utan deadline placeras sist.
+            if (!firstEvent.date) return 1;
+            if (!secondEvent.date) return -1;
+
+            // Sorterar uppgifterna efter datum.
+            return firstEvent.date.localeCompare(secondEvent.date);
         });
 };
 
@@ -104,7 +162,9 @@ const getDaysLeft = (deadline) => {
 // Exporterar funktionerna så att Dashboard-vyn kan använda dem.
 export {
     loadDashboardTasks,
+    loadDashboardEvents,
     getPendingTasks,
+    getPendingEvents,
     getApproachingDeadlines,
     getDaysLeft,
 };

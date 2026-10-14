@@ -3,9 +3,14 @@ const mongoose = require("mongoose");
 const eventSchema = new mongoose.Schema(
     {
         id: Number,
-        titel: String,
+        title: String,
+        description: String,
         location: String,
-        date: Date,
+        date: String,
+        passed: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         _id: false,
