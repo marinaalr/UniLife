@@ -220,6 +220,10 @@
     color: #64748b;
 }
 
+.day-dialog-divider {
+    padding: 10px;
+}
+
 /* Anpassning för mindre skärmar */
 @media (max-width: 800px) {
     .dashboard-content {

@@ -21,5 +21,24 @@ const getDashboardTasks = async (token) => {
     };
 };
 
+const getDashboardEvents = async (token) => {
+    const response = await fetch("http://localhost:5000/api/events", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await response.json();
+
+    return {
+        response,
+        data,
+    };
+};
+
 // Exporterar funktionen så att controllern kan använda den.
-export default getDashboardTasks;
+module.exports = {
+    getDashboardTasks,
+    getDashboardEvents
+};
+//export default getDashboardTasks;

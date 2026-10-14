@@ -18,7 +18,9 @@ import "./Dashboard.css";
 
 import {
     loadDashboardTasks,
+    loadDashboardEvents,
     getPendingTasks,
+    getPendingEvents,
     getApproachingDeadlines,
     getDaysLeft,
 } from "../controllers/dashboardController";
@@ -39,6 +41,7 @@ function Dashboard() {
 
   // Store the tasks loaded for the logged in user
   const [tasks, setTasks] = useState([]);
+  const [events, setEvents] = useState([]);
 
 // Hämtar uppgifterna som ska visas på Dashboard.
 useEffect(() => {
@@ -57,10 +60,24 @@ useEffect(() => {
     }
 
     fetchDashboardTasks();
+
+    async function fetchDashboardEvents() {
+      const result = await loadDashboardEvents();
+
+      if(result.success) {
+        setEvents(result.events);
+      }else{
+        setEvents([]);
+        console.error(result.message);
+      }
+    }
+
+    fetchDashboardEvents();
 }, []);
 
 // Hämtar de ofärdiga uppgifterna från controllern.
 const pendingTasks = getPendingTasks(tasks);
+const pendingEvents = getPendingEvents(events);
 
 // Hämtar uppgifterna med deadlines inom fem dagar.
 const approachingDeadlines = getApproachingDeadlines(tasks);
@@ -158,6 +175,14 @@ const approachingDeadlines = getApproachingDeadlines(tasks);
     return tasks.filter((task) => task.deadline === calendarDate);
   };
 
+  const getEventsForDay = (day) => {
+    //Skapar ett datum i formuläret (ÅÅÅÅ-MM-DD)
+    const calendarDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    //Returnerar uppgifter vars deadline matchar kalenderdatumet
+    return events.filter((event) => event.date === calendarDate);
+  };
+
   return (
     <Box className="dashboard-page">
       <DashboardNavbar />
@@ -242,6 +267,11 @@ const approachingDeadlines = getApproachingDeadlines(tasks);
                           {task.title}
                         </Typography>
                       ))}
+                      {getEventsForDay(day).map((event) => (
+                        <Typography key={event.id} className="calendar-task">
+                          {event.title}
+                        </Typography>
+                      ))}
                     </>
                   )}
                 </Button>
@@ -255,7 +285,7 @@ const approachingDeadlines = getApproachingDeadlines(tasks);
           {/* Upcoming events from Event Management. */}
           <DashboardCard
             title="Upcoming Events"
-            count={0}
+            count={pendingEvents.length}
             message="No upcoming events yet."
           />
 
@@ -384,11 +414,33 @@ const approachingDeadlines = getApproachingDeadlines(tasks);
             Events
           </Typography>
 
-          <Typography className="day-dialog-text">
-            No events scheduled for this day.
-          </Typography>
+          {selectedDay && getEventsForDay(selectedDay).length > 0 ? (
+            <Box className="pending-task-list">
+              {getEventsForDay(selectedDay).map((event) => (
+                <Box key={event.id} className="pending-task-item">
+                  <Typography className="pending-task-title">
+                    {event.title}
+                  </Typography>
 
-          <Divider />
+                  <Box className="pending-task-meta">
+                    <Typography className="pending-task-list-name">
+                      List: {event.listName}
+                    </Typography>
+
+                    <Typography className="pending-task-deadline">
+                      Due {event.date}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          ) : (
+            <Typography className="day-dialog-text">
+              No Events scheduled for this day.
+            </Typography>
+          )}
+
+          <Divider className="day-dialog-divider"/>
 
           {/* Tasks belonging to the selected day. */}
           <Typography variant="h6" className="dialog-section-title">
