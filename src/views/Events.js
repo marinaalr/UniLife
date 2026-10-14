@@ -1,178 +1,266 @@
-import { useEffect, useState } from "react";
-import { Button, TextField, Toolbar, Typography, Box } from "@mui/material";
-import "./Events.css"
+import React, { useEffect, useState } from "react";
+
+import { 
+    Button, 
+    TextField, 
+    Typography, 
+    Box 
+} from "@mui/material";
+
 import DashboardNavbar from './components/DashboardNavbar';
 
+import "./Events.css"
+import {
+    loadEvents,
+    saveUserEvents,
+} from "../controllers/eventController"
+
 function Events() {
-    const [isOpen, setIsOpen] = useState(false);
 
     const [events, setEvents] = useState([]);
-    const [eventsLoaded, setEventsLoaded] = useState(false);
 
-    const [eventName, setName] = useState("");
-    const [eventLocation, setLocation] = useState("");
-    const [eventDate, setDate] = useState("");
+    const [showNewEvent, setShowNewEvent] = useState(false);
 
-    const createEvent = () => {
-        const newEvent = {
-            id: Date.now(),
-            eventName,
-            eventLocation,
-            eventDate
-        };
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [location, setLocation] = useState("");
+    const [date, setDate] = useState("");
 
-        setEvents([...events, newEvent]);
-
-        setName("");
-        setDate("");
-        setLocation("");
-
-        setIsOpen(false);
-    };
+    const [editingEventId, setEditingEventId] = useState(null);
 
     useEffect(() => {
-        async function loadEvents() {
-            const token = localStorage.getItem("token");
+        async function fetchEvents() {
+            const result = await loadEvents();
 
-            try {
-                const response = await fetch(
-                    "http://localhost:5000/api/events",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                const data = await response.json();
-
-                if(response.ok) {
-                    setEvents(data.events);
-                }
-
-                setEventsLoaded(true);
-            } catch {
-                console.log("Could not load events");
+            if(result.success) {
+                setEvents(result.data.events);
             }
         }
 
-        loadEvents();
+        fetchEvents();
     }, []);
 
-    useEffect(() => {
-        async function saveEvents() {
-            const token = localStorage.getItem("token");
+    async function saveEvents(updatedEvents) {
+        const result = await saveUserEvents(updatedEvents);
 
-            try {
-                await fetch(
-                    "http://localhost:5000/api/events",
-                    {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            events: events
-                        })
-                    }
-                );
-            } catch {
-                console.log("Could not save events");
-            }
+        if(!result.success) {
+            console.log("Could not save Events");
+        }
+    }
+
+    const createEvent = () => {
+
+        if(title.trim() === "") {
+            return;
         }
 
-        saveEvents();
-    }, [events, eventsLoaded])
+        if(editingEventId !== null) {
+            const updatedEvents = events.map((event) => {
+                if(event.id === editingEventId) {
+                    return{
+                        ...event,
+                        title: title,
+                        description: description,
+                        location: location,
+                        date: date,
+                    };
+                }
+
+                return event;
+            });
+            
+            setEvents(updatedEvents);
+            saveEvents(updatedEvents);
+
+            setEditingEventId(null);
+
+            setTitle("");
+            setDescription("");
+            setLocation("");
+            setDate("");
+
+            setShowNewEvent(false);
+
+            return;
+        }
+
+
+        const newEvent = {
+            id: Date.now(),
+            title: title,
+            description: description,
+            location: location,
+            date: date,
+            passed: false,
+        };
+
+        const updatedEvents = [...events, newEvent];
+
+
+
+        setEvents(updatedEvents);
+        saveEvents(updatedEvents);
+
+        setTitle("");
+        setDescription("");
+        setLocation("");
+        setDate("");
+
+        setShowNewEvent(false);
+    }
+
+    function cancelNewEvent() {
+        setTitle("");
+        setDescription("");
+        setLocation("");
+        setDate("");
+        setEditingEventId(null);
+        setShowNewEvent(false);
+    }
+
+    
     return (
-        <Box className="eventPage">
-            <DashboardNavbar />
+        <>
+            {/* Dashboard Navigation */}
+            <DashboardNavbar/>
 
-            <Toolbar className="event-toolbar">
+            {/* Main Page */}
+            <Box className="event-page">
 
-                <TextField
-                    label="Search"
-                    type="text"
-                    margin="normal"
-                    className="searchBar"
-                />
+                {/* Top section */}
+                <Box className="event-header">
 
-                <Button>
-                    Filter
-                </Button>
-                <Button onClick={() => setIsOpen(true)}>
-                    Add
-                </Button>
+                    <Box>
+                        <Typography variant="h3" className="event-page-title">
+                            Events
+                        </Typography>
+                    </Box>
 
-                {isOpen && (
-                    <div className="addEventWindow">
-                        <div
-                            className="popup"
-                            component="form"
-                            onClick={(e) => e.stopPropagation}
-                        >
-                            <Typography
-                                variant="h3"
-                                component="h1"
-                                sx={{
-                                    fontFamily: 'Georgia, "Times New Roman", serif',
-                                    fontWeight: 700,
-                                    fontSize: "36px"
-                                }}
-                            >
-                                Create Event
-                            </Typography>              
+                    {/* Open New Event Form */}
+                    <Button
+                        variant="contained"
+                        onClick={() => setShowNewEvent(true)}
+                    >
+                        + New Event
+                    </Button>
+                </Box>
 
+                {/* Background container */}
+                <Box className="event-board">
+
+                    {/* New Event Form */}
+                    {showNewEvent && (
+                        <Box className="new-event-card">
+                            <Typography variant="h5">
+                                {editingEventId !== null ? "Edit Event" : "Add Event"}
+                            </Typography>
+
+                            {/* Event Title */}
                             <TextField
-                                fullWidth
-                                label="Name"
-                                type="text"
-                                required
-                                margin="normal"
-                                value={eventName}
-                                onChange={(event) => setName(event.target.value)}
+                            label="Event name"
+                            value={title}
+                            onChange={(event) => setTitle(event.target.value)}
                             />
 
+                            {/* Event description */}
                             <TextField
-                                fullWidth
+                                label="Description"
+                                multiline
+                                rows={4}
+                                value={description}
+                                onChange={(event) => setDescription(event.target.value)}                            
+                            />
+
+                            {/* Event location */}
+                            <TextField
                                 label="Location"
-                                type="text"
-                                required
-                                margin="normal"
-                                value={eventLocation}
+                                value={location}
                                 onChange={(event) => setLocation(event.target.value)}
                             />
 
-                            <TextField
-                                fullWidth
-                                type="date"
-                                required
-                                margin="normal"
-                                value={eventDate}
-                                onChange={(event) => setDate(event.target.value)}
-                            />
+                            {/* Event date */}
+                            <Box>
+                                <Typography className="input-label">
+                                    Date and Time
+                                </Typography>
 
-                            <Button onClick={createEvent}>
-                                Create
-                            </Button>
+                                <TextField
+                                    type="date"
+                                    fullWidth
+                                    value={date}
+                                    onChange={(event) => setDate(event.target.value)}
+                                />
+                            </Box>
 
-                            <Button onClick={() => setIsOpen(false)}>
-                                Close
-                            </Button>
-                        </div>
-                    </div>
-                )}
-            </Toolbar>
-            <Box className="eventBox">
-                {events.map((event) => (
-                    <div className="eventDisplay" key={event.id}>
-                        <h2 className="eventName">{event.eventName}</h2>
-                        <p className="info">{event.eventLocation} {event.eventDate} </p>
-                    </div>
-                ))}
+                            {/* Form Buttons */}
+                            <Box>
+                                <Button onClick={cancelNewEvent}>
+                                    Cancel
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    onClick={createEvent}
+                                >
+                                    {editingEventId !== null ? "Save Changes" : "Add Event"}
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
+
+                    {/* Message when there are no upcoming events */}
+                    {!showNewEvent && events.length === 0 && (
+                        <Typography className="no-events">
+                            There are no upcoming events currently
+                        </Typography>
+                    )}
+
+                    {/* Show all events */}
+                    {editingEventId === null && events.map((event) => (
+                        <Box
+                            className={`event-card ${event.passed ? "passed-event" : ""}`}
+                            key={event.id}
+                        >
+                            <Box className="event-content">
+
+                                {/* Event Title */}
+                                <Typography variant="h6">
+                                    {event.title}
+                                </Typography>
+
+                                {/* Event Description */}
+                                {event.description && (
+                                    <Typography className="event-description">
+                                        {event.description}
+                                    </Typography>
+                                )}
+
+                                {/* Event Location */}
+                                {event.location && (
+                                    <Typography className="event-location">
+                                        Location: {event.location}
+                                    </Typography>
+                                )}
+
+                                {/* Event Date */}
+                                {event.date && (
+                                    <Typography className="event-date">
+                                        Date: {event.date}
+                                    </Typography>
+                                )}
+                            </Box>
+
+                            {/* Subscribe to Event */}
+
+                            {/* Edit the Event */}
+
+                            {/* Delete the Event */}
+                        </Box>
+                    ))}
+                </Box>
             </Box>
-        </Box>
-    )
+        </>        
+    );
 }
 
 export default Events;
