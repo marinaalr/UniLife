@@ -3,10 +3,12 @@
 
 const getTasks = async (token) => {
     // Get the logged in user's tasks from the backend.
+    //na deiksw sthn parousiash
     const response = await fetch(
         "http://localhost:5000/api/tasks",
         {
             headers: {
+                //na deiksw sthn parousiash
                 Authorization: `Bearer ${token}`,
             },
         },
