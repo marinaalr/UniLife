@@ -24,6 +24,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import DashboardNavbar from "./components/DashboardNavbar";
 
 // Import CSS for this page
+// na diksw sthn parousiash 
 import "./TasksPage.css";
 import {
   loadTasks,
@@ -48,29 +49,33 @@ function TasksPage() {
   // Store which task is being edited
   const [editingTaskId, setEditingTaskId] = useState(null);
 
-// Load tasks from the database when the page opens
-useEffect(() => {
+  // Store an error message for an invalid deadline
+  const [deadlineError, setDeadlineError] = useState("");
 
-  async function fetchTasks() {
-    const result = await loadTasks();
+  // Load tasks from the database when the page opens
+  useEffect(() => {
 
-    if (result.success) {
-      setTasks(result.data.tasks);
+    async function fetchTasks() {
+      //na deiksw sthn parousiash 
+      const result = await loadTasks();
+
+      if (result.success) {
+        setTasks(result.data.tasks);
+      }
+    }
+
+    fetchTasks();
+
+  }, []);
+
+  // Save tasks through the controller
+  async function saveTasks(updatedTasks) {
+    const result = await saveUserTasks(updatedTasks);
+
+    if (!result.success) {
+      console.log("Could not save tasks.");
     }
   }
-
-  fetchTasks();
-
-}, []);
-
- // Save tasks through the controller
-async function saveTasks(updatedTasks) {
-  const result = await saveUserTasks(updatedTasks);
-
-  if (!result.success) {
-    console.log("Could not save tasks.");
-  }
-}
 
   // Create a new task
   function createTask() {
@@ -79,6 +84,18 @@ async function saveTasks(updatedTasks) {
     if (title.trim() === "") {
       return;
     }
+
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toLocaleDateString("en-CA");
+
+    // Stop if the deadline is before today
+    if (deadline && deadline < today) {
+      setDeadlineError("Please choose a valid deadline.");
+      return;
+    }
+
+    // Remove an old error message if the date is valid
+    setDeadlineError("");
 
     // Update a task if we are editing
     if (editingTaskId !== null) {
@@ -284,7 +301,25 @@ async function saveTasks(updatedTasks) {
                   type="date"
                   fullWidth
                   value={deadline}
-                  onChange={(event) => setDeadline(event.target.value)}
+
+                  // Save the selected deadline
+                  onChange={(event) => {
+                    setDeadline(event.target.value);
+
+                    // Remove the error when the user selects a new date
+                    setDeadlineError("");
+                  }}
+
+                  // Do not allow dates before today
+                  inputProps={{
+                    min: new Date().toLocaleDateString("en-CA"),
+                  }}
+
+                  // Show the field in red if the deadline is invalid
+                  error={Boolean(deadlineError)}
+
+                  // Show the error message under the field
+                  helperText={deadlineError}
                 />
               </Box>
 
