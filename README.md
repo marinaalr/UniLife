@@ -51,14 +51,12 @@ I, Ludvig Kågefors, declare that I am the sole author of the content that I add
 ### Personal Dashboard
 
 - View upcoming events
-- View joined events
 - View pending tasks
 - View approaching deadlines
 
 ### Notifications
 
 - Receive notifications about upcoming events
-- Receive updates concerning joined events
 - Receive reminders about approaching task deadlines
 
 

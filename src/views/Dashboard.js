@@ -287,13 +287,7 @@ const approachingDeadlines = getApproachingDeadlines(tasks);
             title="Upcoming Events"
             count={pendingEvents.length}
             message="No upcoming events yet."
-          />
-
-          {/* Joined events from Event Management. */}
-          <DashboardCard
-            title="Joined Events"
-            count={0}
-            message="No joined events yet."
+            events={pendingEvents}
           />
 
           {/* Pending tasks from Task Management. */}
