@@ -107,18 +107,25 @@ const getPendingTasks = (tasks) => {
         });
 };
 
-const getPendingEvents = (events) => {
-    return events
-        .filter((event) => !event.passed)
-        .sort((firstEvent, secondEvent) => {
-            // Uppgifter utan deadline placeras sist.
-            if (!firstEvent.date) return 1;
-            if (!secondEvent.date) return -1;
 
-            // Sorterar uppgifterna efter datum.
-            return firstEvent.date.localeCompare(secondEvent.date);
-        });
+const getPendingEvents = (events) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return events
+        .filter((event) => {
+            if (!event.date) {
+                return false;
+            }
+
+            const eventDate = new Date(`${event.date}T00:00:00`);
+            return eventDate >= today;
+        })
+        .sort((firstEvent, secondEvent) =>
+            firstEvent.date.localeCompare(secondEvent.date)
+        );
 };
+
 
 // Filtrerar fram uppgifter med deadline inom de kommande fem dagarna.
 const getApproachingDeadlines = (tasks) => {

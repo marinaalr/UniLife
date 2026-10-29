@@ -119,31 +119,6 @@
     transform: scale(0.98);
 }
 
-
-/* Forgot password link */
-.forgot-button {
-    display: block;
-
-    margin: 18px auto 0;
-    padding: 0;
-
-    color: #5f76d6;
-
-    font-size: 14px;
-    font-family: inherit;
-
-    text-decoration: none;
-    cursor: pointer;
-}
-
-
-.forgot-button:hover {
-    color: #3971d6;
-    text-decoration: underline;
-}
-
-
-/* Text below the form */
 .register-text {
     margin-top: 24px;
 
