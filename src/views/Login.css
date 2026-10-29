@@ -1,68 +1,151 @@
+/* Main login page */
 .login-page {
     min-height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #eef3f8;
-    font-family: Georgia, "Times New Roman", serif;
+
+    background: linear-gradient(
+        135deg,
+        #e6f0ff 0%,
+        #edf2ff 55%,
+        #f3efff 100%
+    );
+
+    font-family: inherit;
 }
 
+
+/* Login card */
 .login-card {
     width: 420px;
-    padding: 45px;
-    background: white;
-    border: 1px solid #d9e1e8;
-    border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(23, 50, 77, 0.12);
+    padding: 40px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e5eaf3;
+    border-left: 4px solid #6f86e8;
+    border-radius: 14px;
+
+    box-shadow: 0 8px 25px rgba(23, 37, 84, 0.08);
+
     text-align: center;
 }
 
+
+/* Main heading */
+.login-card h1,
+.login-card h2,
+.login-card .MuiTypography-h4,
+.login-card .MuiTypography-h5 {
+    color: #172554;
+
+    font-family: inherit !important;
+    font-weight: 700 !important;
+}
+
+
+/* Subtitle */
 .login-subtitle {
     margin-bottom: 32px;
-    color: #667085;
+
+    color: #64748b;
+
     font-size: 17px;
 }
 
+
+/* Input fields */
+.login-card .MuiOutlinedInput-root {
+    background-color: #ffffff;
+
+    border-radius: 10px;
+}
+
+
+/* Input border when selected */
+.login-card .MuiOutlinedInput-root.Mui-focused
+.MuiOutlinedInput-notchedOutline {
+    border-color: #6f86e8;
+}
+
+
+/* Input label when selected */
+.login-card .MuiInputLabel-root.Mui-focused {
+    color: #5f76d6;
+}
+
+
+/* Login button */
 .login-button {
     width: 100%;
-    padding: 13px;
-    margin-top: 10px;
-    border-radius: 8px;
-    background: #2f6f8f;
-    color: white;
-    font-size: 17px;
+
+    margin-top: 12px;
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #3971d6;
+
+    color: #ffffff;
+
+    font-size: 16px;
     font-weight: 600;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: inherit;
+
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+
+    box-shadow: 0 4px 10px rgba(57, 113, 214, 0.22);
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
 }
 
+
+/* Login button hover */
 .login-button:hover {
-    background: #245970;
+    background-color: #2f63c2;
+
+    box-shadow: 0 5px 14px rgba(57, 113, 214, 0.28);
 }
 
+
+/* Login button click */
 .login-button:active {
     transform: scale(0.98);
 }
 
 .register-text {
     margin-top: 24px;
-    color: #667085;
+
+    color: #64748b;
+
     font-size: 14px;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: inherit;
 }
 
+
+/* Sign up link */
 .signup-button {
     margin-left: 5px;
     padding: 0;
-    color: #2f6f8f;
+
+    color: #5f76d6;
+
     font-size: 14px;
     font-weight: 600;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: inherit;
+
     text-decoration: none;
     cursor: pointer;
 }
 
+
 .signup-button:hover {
+    color: #3971d6;
     text-decoration: underline;
 }

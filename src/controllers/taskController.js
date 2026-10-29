@@ -2,6 +2,8 @@
 // This controller handles the task operations
 // between the TasksPage and the task service.
 
+
+//na deiksw sthn parousiash
 import {
     getTasks,
     saveTasks,
@@ -9,11 +11,13 @@ import {
 
 
 // Load the logged in user's tasks.
+//token proff that the user is logged in 
 const loadTasks = async () => {
     const token = localStorage.getItem("token");
 
     try {
         // Ask the service to get the tasks from the backend.
+        //na deiksw sthn parousiash 
         const { response, data } = await getTasks(token);
 
         if (!response.ok) {
