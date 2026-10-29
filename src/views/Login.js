@@ -37,13 +37,6 @@ function Login() {
 
                 <LoginForm />
 
-                <Link
-                    className="forgot-button"
-                    to="/forgot-password"
-                >
-                    Forgot password?
-                </Link>
-
                 <Typography className="register-text">
                     Don't have an account?{" "}
                     <Link

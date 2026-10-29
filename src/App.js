@@ -3,7 +3,6 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import Dashboard from "./views/Dashboard";
 import HomePage from "./views/HomePage";
-import ForgotPassword from "./views/ForgotPassword";
 import Login from "./views/Login";
 import Signup from "./views/sign_up";
 import Events from "./views/Events";
@@ -25,12 +24,6 @@ function App() {
                 <Route
                     path="/login"
                     component={Login}
-                />
-
-                <Route
-                    path="/forgot-password"
-                    component={ForgotPassword}
-
                 />
 
                 <Route

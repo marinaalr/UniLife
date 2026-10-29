@@ -45,21 +45,6 @@
     transform: scale(0.98);
 }
 
-.forgot-button {
-    display: block;
-    margin: 18px auto 0;
-    padding: 0;
-    color: #2f6f8f;
-    font-size: 14px;
-    font-family: Georgia, "Times New Roman", serif;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.forgot-button:hover {
-    text-decoration: underline;
-}
-
 .register-text {
     margin-top: 24px;
     color: #667085;
