@@ -4,11 +4,9 @@
 
 UniLife is a web application developed to provide university students with a centralized platform for organizing and managing various aspects of their academic and social lives. 
 
-The application enables users to discover and participate in campus events, organize personal tasks, and receive relevant notifications. Users can also customize their profiles to present information about themselves. 
+The application provides features for managing campus events, organizing tasks, and keeping track of upcoming activities and deadlines. 
 
-Administrators have additional permissions to manage user accounts and oversee the content published within the application, including the moderation of events. 
-
-Overall, UniLife is intended to offer a structured and convenient digital environment that brings together essential academic and social activities in one place. 
+The goal of UniLife is to offer a structured and convenient digital environment that brings together essential academic and social activities in one place. 
 
 
 ## Team Members
@@ -41,13 +39,6 @@ I, Ludvig Kågefors, declare that I am the sole author of the content that I add
 - Create campus events
 - View available events
 - Edit and delete own events
-- Allow administrators to manage and moderate events
-
-### Event Participation
-
-- Join events
-- Leave events
-- View events the user is participating in
 
 ### Task Management
 
@@ -56,7 +47,6 @@ I, Ludvig Kågefors, declare that I am the sole author of the content that I add
 - Mark tasks as completed
 - Delete tasks
 - Set and update deadlines
-- Track task progress
 
 ### Personal Dashboard
 
@@ -65,22 +55,11 @@ I, Ludvig Kågefors, declare that I am the sole author of the content that I add
 - View pending tasks
 - View approaching deadlines
 
-### Search and Filtering
-
-- Search for events
-- Filter events by keywords, categories, dates, and locations
-
 ### Notifications
 
 - Receive notifications about upcoming events
 - Receive updates concerning joined events
 - Receive reminders about approaching task deadlines
-
-### Administration and Moderation
-
-- Manage users
-- Moderate events
-- Remove inappropriate events or content
 
 
 ## Main Entities / Objects
@@ -103,8 +82,6 @@ Represents campus events and contains information such as:
 - Description
 - Date
 - Location
-- Creator
-- Participants
 
 ### Task
 
@@ -114,7 +91,6 @@ Represents personal academic or organizational tasks, including:
 - Description
 - Deadline
 - Status
-- Assigned user
 
 
 ## How It Works
@@ -123,7 +99,7 @@ UniLife brings together academic and social activities within a single web appli
 
 ### Events
 
-Users can discover available campus events, view event information, and participate in events that interest them. 
+Users can create, view, edit, and delete their own events. 
 
 ### Tasks
 
@@ -133,9 +109,6 @@ Users can organize their academic and organizational responsibilities by creatin
 
 Users can manage their profiles including their name, profile picture, university, field of study, and a short biography. 
 
-### Administration
-
-Administrators have additional permissions that allow them to manage users and moderate events and content. 
 
 
 ## Technologies
@@ -153,24 +126,25 @@ The project is developed using the following technologies:
 
 
 ## Project Structure
-The project follows an MVC structure to seperate the user interface, application logic, and data handling. 
-- Components: Reusable Recat components.
-- Views: Pages and user interfaces. 
-- Controllers: Handle application logic. 
-- Services: Handle frontend operations and communication with the backend. 
-- Models: Define application data and support database operations.
-- Routes: Define backend API endpoints. 
-- Middleware: Processes requests before they reach the relevant route handlers. 
-- Server: Configures and starts the Express.js backend.  
+The project is organized into separate components to distinguish between the user interface, application logic, and data handling.
+
+- **Components**: Reusable React components used to build the user interface. 
+- **Views**: Pages that make up the frontend application. 
+- **Controllers**: Coordinate application logic and handle requests.
+- **Services**: Handle frontend operations and communication with the backend API. 
+- **Models**: Define the structure of application data stored in the database.
+- **Routes**: Define backend API endpoints. 
+- **Middleware**: Processes requests before they reach the relevant route handlers. 
+- **Server**: Configures and starts the Express.js backend and establishes the database connection.
 
 
 ## How to Run the Project
 
-To run UniLife locally, follow the steps below.
+Follow the steps below to run UniLife
 
 ### Clone the Repository
 
-Clone the repository by using: 
+Clone the repository: 
 ```bash
 git clone https://github.com/marinaalr/UniLife.git
 ```
@@ -182,7 +156,7 @@ cd UniLife
 
 ### Installation
 
-Install the required project dependencies by running: 
+Install the project dependencies: 
 ```bash
 npm install
 ```
@@ -197,13 +171,13 @@ Start the backend server in one terminal:
 node server/server.js
 ```
 
-Open a second terminal and start the React application:
+Open a second terminal and start the frontend application:
 
 ```bash
 npm start
 ```
 
-The application will then be available in the browser at:
+The application will be available in the browser at:
 
 ```bash
 http://localhost:3000
@@ -211,14 +185,13 @@ http://localhost:3000
 
 ### Build
 
-To create a production build of the application, run: 
+To create a production build of the frontend, run: 
 ```bash
 npm run build
 ```
 
 ### Code Quality
 
-Run ESLint using: 
 To check the source code using ESLint, run:
 
 ```bash
