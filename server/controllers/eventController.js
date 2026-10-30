@@ -1,6 +1,7 @@
 const MongoEvent = require("../models/MongoEvents");
 const MongoNotification = require("../models/MongoNotification");
 
+// Get the User's events
 const getEvents = async (req, res) => {
     try {
         const userEvents = await MongoEvent.findOne({
@@ -17,6 +18,7 @@ const getEvents = async (req, res) => {
     }
 };
 
+// Save the User's events
 const saveEvents = async (req, res) => {
     try {
         const { events } = req.body;
@@ -27,6 +29,7 @@ const saveEvents = async (req, res) => {
             });
         }
 
+        // Save the events
         const savedEvent = await MongoEvent.findOneAndUpdate(
             {
                 userId: req.user.id,
@@ -41,8 +44,10 @@ const saveEvents = async (req, res) => {
             },
         );
         
+        // Get all the event IDs
         const currentEventIds = events.map((event) => event.id);
 
+        // Remove notifications for events that no longer exist
         await MongoNotification.deleteMany({
             userId: req.user.id,
             type: "event_date",
@@ -51,13 +56,17 @@ const saveEvents = async (req, res) => {
             },
         });
 
+        // Calculate Current Date
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
+        // Calculate Date 5 days form now
         const fiveDaysFromNow = new Date(today);
         fiveDaysFromNow.setDate(today.getDate() + 5);
 
+        // Create/Update/Remove Event Notifications
         for(const event of events){
+            // Remove Event Notifications Without A Date
             if(!event.date){
                 await MongoNotification.deleteMany({
                     userId: req.user.id,
@@ -70,6 +79,8 @@ const saveEvents = async (req, res) => {
 
             const eventDate = new Date(`${event.date}`);
 
+            // Remove Event Notifications For Events
+            // More than 5 Days From Now
             if(eventDate < today || eventDate > fiveDaysFromNow) {
                 await MongoNotification.deleteMany({
                     userId: req.user.id,
@@ -80,12 +91,14 @@ const saveEvents = async (req, res) => {
                 continue;
             }
 
+            // Calculate Days Until Event
             const difference = eventDate - today;
 
             const daysLeft = Math.round(
                 difference / (1000 * 60 * 60 * 24),
             );
 
+            // Create Notification Message
             let message;
 
             if(daysLeft === 0) {
@@ -96,6 +109,7 @@ const saveEvents = async (req, res) => {
                 message = `Event "${event.title}" occurs in ${daysLeft} days`;
             }
 
+            // Check If Notification Exists
             const existingNotification = 
                 await MongoNotification.findOne({
                     userId: req.user.id,
@@ -104,6 +118,8 @@ const saveEvents = async (req, res) => {
                 });
             
             if(!existingNotification) {
+
+                // Create Notification
                 await MongoNotification.create({
                     userId: req.user.id,
                     message,

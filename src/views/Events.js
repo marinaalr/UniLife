@@ -17,17 +17,19 @@ import {
 
 function Events() {
 
+    // Store Events
     const [events, setEvents] = useState([]);
-
+    // Show New Event Form
     const [showNewEvent, setShowNewEvent] = useState(false);
-
+    // Store New Event Information
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
     const [date, setDate] = useState("");
-
+    // Store ID For Event Being Edited
     const [editingEventId, setEditingEventId] = useState(null);
 
+    // Load Events From The Database
     useEffect(() => {
         async function fetchEvents() {
             const result = await loadEvents();
@@ -40,6 +42,7 @@ function Events() {
         fetchEvents();
     }, []);
 
+    // Save Events
     async function saveEvents(updatedEvents) {
         const result = await saveUserEvents(updatedEvents);
 
@@ -48,12 +51,14 @@ function Events() {
         }
     }
 
+    // Create Events
     const createEvent = () => {
 
         if(title.trim() === "") {
             return;
         }
 
+        // Edit Events
         if(editingEventId !== null) {
             const updatedEvents = events.map((event) => {
                 if(event.id === editingEventId) {
@@ -84,7 +89,7 @@ function Events() {
             return;
         }
 
-
+        // Create New Event
         const newEvent = {
             id: Date.now(),
             title: title,
@@ -97,18 +102,19 @@ function Events() {
         const updatedEvents = [...events, newEvent];
 
 
-
+        // Save New Event
         setEvents(updatedEvents);
         saveEvents(updatedEvents);
-
+        // Reset Form Data
         setTitle("");
         setDescription("");
         setLocation("");
         setDate("");
-
+        // Hide New Event Form
         setShowNewEvent(false);
     }
 
+    // Cancel During New Event Form
     function cancelNewEvent() {
         setTitle("");
         setDescription("");

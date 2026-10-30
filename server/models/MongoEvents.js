@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Describe One Event
 const eventSchema = new mongoose.Schema(
     {
         id: Number,
@@ -17,6 +18,7 @@ const eventSchema = new mongoose.Schema(
     },
 );
 
+// Store User Events
 const subscribedEventSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +32,7 @@ const subscribedEventSchema = new mongoose.Schema({
     },
 });
 
+// Create MongoDB Model
 const MongoEvent = mongoose.model("Event", subscribedEventSchema);
 
 module.exports = MongoEvent;

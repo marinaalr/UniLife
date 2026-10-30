@@ -1,4 +1,5 @@
 const getEvents = async (token) => {
+    // Get The Users Events From The Backend
     const response = await fetch(
         "http://localhost:5000/api/events",
         {
@@ -17,6 +18,7 @@ const getEvents = async (token) => {
 };
 
 const saveEvents = async (token, events) => {
+    // Save The Users Events To The Backend
     const response = await fetch(
         "http://localhost:5000/api/events",
         {
@@ -31,8 +33,10 @@ const saveEvents = async (token, events) => {
         },
     );
 
+    // Convert The Server Response From JSON
     const data = await response.json();
 
+    // Return Response And Data
     return {
         response,
         data,
