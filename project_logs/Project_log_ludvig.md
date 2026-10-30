@@ -7,6 +7,7 @@
 - Added functionality to create events
 - Redesigned the event page
 - Redesigned event data structure
+- Restructured events to follow the MVC model
 - Implemented event backend so that event data can be saved/loaded from the database
 - Integrated events into the calender so that events were shown
 - Added notification functionality for events
